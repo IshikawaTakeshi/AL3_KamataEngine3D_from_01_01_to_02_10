@@ -100,6 +100,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	audio->Finalize();
 	// ImGui解放
 	imguiManager->Finalize();
+	
 
 	// ゲームウィンドウの破棄
 	win->TerminateGameWindow();

@@ -7,6 +7,7 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "debugCamera.h"
 
 /// <summary>
 /// ゲームシーン

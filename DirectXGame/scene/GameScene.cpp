@@ -10,7 +10,12 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete sprite_;
 	delete model_;
+
+#ifdef _DEBUG
 	delete debugCamera_;
+#endif // _DEBUG
+
+	
 }
 
 void GameScene::Initialize() {
@@ -21,7 +26,7 @@ void GameScene::Initialize() {
 
 	
 	//テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("pictgram.png");
+	textureHandle_ = TextureManager::Load("pictogram.png");
 	//スプライト生成
 	sprite_ = Sprite::Create(textureHandle_, { 100,50 });
 

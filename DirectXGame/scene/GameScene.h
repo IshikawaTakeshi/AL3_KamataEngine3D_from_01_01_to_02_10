@@ -9,6 +9,8 @@
 #include "WorldTransform.h"
 #include "debugCamera.h"
 
+#include "Player.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -71,4 +73,7 @@ private: // メンバ変数
 
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
+	
+	//プレイヤー
+	Player* player_ = nullptr;
 };

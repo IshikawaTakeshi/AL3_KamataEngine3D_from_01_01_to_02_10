@@ -56,7 +56,7 @@ void GameScene::Initialize() {
 
 	//プレイヤー生成
 	player_ = new Player();
-	player_->Initialize(Model::Create(),TextureManager::Load("pictogram.png"));
+	player_->Initialize(model_,textureHandle_, &viewProjection_);
 }
 
 void GameScene::Update() {
@@ -125,7 +125,7 @@ void GameScene::Draw() {
 	player_->Draw();
 
 	//3Dモデル描画
-	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
+	//model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
 
 
 

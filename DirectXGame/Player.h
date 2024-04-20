@@ -1,29 +1,29 @@
-#pragma once
+ï»¿#pragma once
 
 /// <summary>
-/// ƒvƒŒƒCƒ„[
+/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
 /// </summary>
 class Player {
 
 public:
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// XVˆ—
+	/// æ›´æ–°å‡¦ç†
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æˆ—
+	/// æç”»å‡¦ç†
 	/// </summary>
 	void Draw();
 
 private:
-	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	
 
 };

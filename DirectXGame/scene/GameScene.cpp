@@ -38,18 +38,18 @@ void GameScene::Initialize() {
 	//要素数
 	const uint32_t kNumJointHorizonal = 3;
 
-	//ブロック1個分の横幅
-	const float kBlockWidth = 2.0f;
-	const float kBlockHeight = 2.0f;
+	//関節1個分の横幅
+	const float kJointWidth = 2.0f;
+	const float kJointHeight = 2.0f;
 	//要素数を変更する
 	joints_.resize(kNumJointHorizonal);
 
-	//	ブロックの生成
+	//関節の生成
 	for (uint32_t row = 0; row < kNumJointHorizonal; row++) {
 		joints_[row] = new WorldTransform();
 		joints_[row]->Initialize();
-		joints_[row]->translation_.x = kBlockHeight * row * 6.0f;
-		joints_[row]->translation_.y = kBlockWidth;
+		joints_[row]->translation_.x = kJointHeight * row * 6.0f;
+		joints_[row]->translation_.y = kJointWidth;
 	}
 
 	//bornの要素数
@@ -59,7 +59,7 @@ void GameScene::Initialize() {
 	//ボーンの生成
 	born_[0] = { {10,0,0}, {0,0,0},{0,0,0},0 };
 	born_[0].length = MyMath::Distance(born_[0].tip, born_[0].root);
-	born_[1] = { {20,0,0}, born_[0].tip,{0,0,0},0};
+	born_[1] = { {20,0,0}, born_[0].tip,{0,0,0},0 };
 	born_[1].length = MyMath::Distance(born_[1].tip, born_[1].root);
 
 	modelJoint_ = Model::Create();
@@ -71,20 +71,20 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
+	//ボーン1の角度の更新
 	float born1Numerator = powf(born_[1].tip.x, 2) - powf(born_[1].tip.y, 2)
 		+ powf(born_[0].length, 2) - powf(born_[1].length, 2);
 	float born1Denominator = 2 * born_[0].length
 		* sqrtf(powf(born_[1].tip.x, 2) + powf(born_[1].tip.y, 2));
 
-	//ボーン1の角度の更新
 	//atanの範囲が-PI/2 ~ PI/2なので場合分けして計算する
 	if (born_[1].tip.x >= 0) {
-		
+
 		born_[0].angle.x = acos(born1Numerator / born1Denominator)
 			+ atan(born_[1].tip.y / born_[1].tip.x);
 
 	} else { //xの値がマイナスの時
-		born_[0].angle.x = acos(born1Numerator / born1Denominator) 
+		born_[0].angle.x = acos(born1Numerator / born1Denominator)
 			+ atan(born_[1].tip.y / born_[1].tip.x) + std::numbers::pi_v<float>;
 	}
 
@@ -99,8 +99,8 @@ void GameScene::Update() {
 	float born2Numerator = powf(born_[0].length, 2) + powf(born_[1].length, 2)
 		- (powf(born_[1].tip.x, 2) + powf(born_[1].tip.y, 2));
 	float born2Denominator = 2 * born_[0].length * born_[1].length;
-	born_[1].angle.x = std::numbers::pi_v<float> +acos(born2Numerator / born2Denominator);
-	
+	born_[1].angle.x = std::numbers::pi_v<float> + acos(born2Numerator / born2Denominator);
+
 	//ボーン2の根本・先端の更新
 	born_[1].root.x = born_[0].length * cos(born_[0].angle.x);
 	born_[1].root.y = born_[0].length * sin(born_[0].angle.x);
@@ -111,10 +111,6 @@ void GameScene::Update() {
 	joints_[0]->translation_ = { born_[0].root.x,born_[0].root.y,born_[0].root.z };
 	joints_[1]->translation_ = { born_[1].root.x,born_[1].root.y,born_[1].root.z };
 	joints_[2]->translation_ = { born_[1].tip.x,born_[1].tip.y,born_[1].tip.z };
-
-	//上限値から出ないようにする
-	MyMath::Clamp(born_[1].tip.x, -1.0f * abs(born_[0].length + born_[1].length), abs(born_[0].length + born_[1].length));
-	MyMath::Clamp(born_[1].tip.y, -1.0f * abs(born_[0].length + born_[1].length), abs(born_[0].length + born_[1].length));
 
 	joints_[0]->UpdateMatrix();
 	joints_[1]->UpdateMatrix();
@@ -130,7 +126,7 @@ void GameScene::Update() {
 
 	//ボーンの操作
 	ImGui::Begin("born_2");
-	
+
 	ImGui::SliderFloat(
 		"tipTranslateX",
 		&born_[1].tip.x,
@@ -141,8 +137,8 @@ void GameScene::Update() {
 	ImGui::SliderFloat(
 		"tipTranslateY",
 		&born_[1].tip.y,
-		-1.0f * abs(born_[0].length + born_[1].length),
-		abs(born_[0].length + born_[1].length),
+		-1.0f * abs(born_[0].length + born_[1].length + 1.0f),
+		abs(born_[0].length + born_[1].length - 1.0f),
 		"%.3f"
 	);
 	ImGui::End();

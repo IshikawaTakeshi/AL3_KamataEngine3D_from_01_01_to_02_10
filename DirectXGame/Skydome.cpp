@@ -1,8 +1,8 @@
 ﻿#include "Skydome.h"
 #include "MyMath/MatrixMath.h"
 
-void Skydome::Initialize(uint32_t textureHandle,const ViewProjection* viewProjection) {
-	model_ = Model::CreateFromOBJ("Skydome", true);
+void Skydome::Initialize(Model* model,uint32_t textureHandle,const ViewProjection* viewProjection) {
+	model_ = model;
 	viewProjection_ = viewProjection;
 	textureHandle_ = textureHandle;
 	worldTransform_.scale_ = { 1.0f,1.0f,1.0f };

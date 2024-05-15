@@ -42,7 +42,8 @@ GameScene::~GameScene() {
 		AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 
 		//天球の生成
-		skydome_->Initialize(textureHandle_,&debugCamera_->GetViewProjection());
+		modelSkydome_ = Model::CreateFromOBJ("sphere", true);
+		skydome_->Initialize(modelSkydome_,textureHandle_,&debugCamera_->GetViewProjection());
 	
 		//要素数
 		const uint32_t kNumblockVirtical = 10;
@@ -144,6 +145,7 @@ GameScene::~GameScene() {
 		}
 
 		skydome_->Draw();
+		modelSkydome_->Draw()
 
 		// 3Dオブジェクト描画後処理
 		Model::PostDraw();

@@ -29,7 +29,7 @@ public:
 
 private:
 	//ワールド変換データ
-	WorldTransform* worldTransform_;
+	WorldTransform worldTransform_;
 	//ビュープロジェクション
 	const ViewProjection* viewProjection_ = nullptr;
 	//モデル

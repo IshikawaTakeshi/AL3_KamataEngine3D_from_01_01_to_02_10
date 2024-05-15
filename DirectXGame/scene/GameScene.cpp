@@ -10,6 +10,9 @@ GameScene::~GameScene() {
 
 	delete modelBlock_;
 
+	delete skydome_;
+	delete modelSkydome_;
+
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			delete worldTransformBlock;
@@ -26,6 +29,7 @@ GameScene::~GameScene() {
 		input_ = Input::GetInstance();
 		audio_ = Audio::GetInstance();
 
+		textureHandle_ = TextureManager::Load("Resource/skydome/Skydome.jpg");
 		//カメラの生成
 		debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 		cameraMarix_ = MatrixMath::MakeAffineMatrix(
@@ -34,8 +38,13 @@ GameScene::~GameScene() {
 			debugCamera_->GetViewProjection().translation_
 		);
 
+		//軸方向表示の生成	
 		AxisIndicator::GetInstance()->SetVisible(true);
 		AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
+
+		//天球の生成
+		skydome_->Initialize(textureHandle_,&debugCamera_->GetViewProjection());
+		modelSkydome_ = Model::CreateFromOBJ("Skydome", true);
 
 		//要素数
 		const uint32_t kNumblockVirtical = 10;
@@ -79,6 +88,7 @@ GameScene::~GameScene() {
 				worldTransformBlock->UpdateMatrix();
 			}
 		}
+		worldTransformSkydome_->UpdateMatrix();
 #ifdef _DEBUG
 		
 		if (input_->TriggerKey(DIK_SPACE)) {
@@ -133,6 +143,8 @@ GameScene::~GameScene() {
 				modelBlock_->Draw(*worldTransformBlock, viewProjection_);
 			}
 		}
+
+		modelSkydome_->Draw(*worldTransformSkydome_, viewProjection_);
 
 		// 3Dオブジェクト描画後処理
 		Model::PostDraw();

@@ -8,7 +8,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "DebugCamera.h"
-
+#include "Skydome.h"
 
 #include <vector>
 
@@ -54,10 +54,17 @@ private: // メンバ変数
 	
 	ViewProjection viewProjection_;
 
-	Sprite sprite_;
+	//テクスチャハンドル
+	uint32_t textureHandle_ = 0;
+	//カメラ
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
 	Matrix4x4 cameraMarix_;
+	//天球
+	Skydome* skydome_ = nullptr;
+	Model* modelSkydome_ = nullptr;
+	WorldTransform* worldTransformSkydome_ = nullptr;
+	//ブロック
 	Model* modelBlock_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 };

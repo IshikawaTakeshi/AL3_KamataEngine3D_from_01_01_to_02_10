@@ -5,9 +5,6 @@
 void Skydome::Initialize() {
 	worldTransform_.Initialize();
 	model_ = Model::CreateFromOBJ("Skydome", true);
-	////テクスチャハンドル
-	//textureHandle_ = TextureManager::Load("skydome/Skydome.jpg");
-
 }
 
 void Skydome::Update() {

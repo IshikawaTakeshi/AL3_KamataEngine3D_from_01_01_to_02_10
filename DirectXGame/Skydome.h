@@ -12,7 +12,7 @@ public:
 	/// <param name="model">モデル</param>
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	/// <param name="viewProjection">ビュープロジェクション</param>
-	void Initialize(Model* model,uint32_t textureHandle, const ViewProjection* viewProjection);
+	void Initialize();
 
 	/// <summary>
 	/// 更新処理
@@ -22,12 +22,10 @@ public:
 	/// <summary>
 	/// 描画処理
 	/// </summary>
-	void Draw();
+	void Draw(const ViewProjection& viewProjection);
 
 	Skydome() = default;
 	~Skydome();
-
-	WorldTransform GetWorld() { return worldTransform_; }
 
 private:
 	//ワールド変換データ

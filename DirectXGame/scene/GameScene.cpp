@@ -28,7 +28,6 @@ GameScene::~GameScene() {
 		input_ = Input::GetInstance();
 		audio_ = Audio::GetInstance();
 
-		textureHandle_ = TextureManager::Load("skydome/Skydome.jpg");
 		//カメラの生成
 		debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 		cameraMarix_ = MatrixMath::MakeAffineMatrix(
@@ -41,9 +40,6 @@ GameScene::~GameScene() {
 		AxisIndicator::GetInstance()->SetVisible(true);
 		AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 
-		//天球の生成
-		modelSkydome_ = Model::CreateFromOBJ("sphere", true);
-		skydome_->Initialize(modelSkydome_,textureHandle_,&debugCamera_->GetViewProjection());
 	
 		//要素数
 		const uint32_t kNumblockVirtical = 10;
@@ -69,6 +65,10 @@ GameScene::~GameScene() {
 					}
 			}
 		}
+
+		//天球の生成
+		skydome_ = new Skydome();
+		skydome_->Initialize();
 
 		viewProjection_.Initialize();
 		modelBlock_ = Model::Create();
@@ -144,8 +144,7 @@ GameScene::~GameScene() {
 			}
 		}
 
-		skydome_->Draw();
-		modelSkydome_->Draw()
+		skydome_->Draw(viewProjection_);
 
 		// 3Dオブジェクト描画後処理
 		Model::PostDraw();

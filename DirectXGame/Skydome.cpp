@@ -1,28 +1,22 @@
 ﻿#include "Skydome.h"
 #include "MyMath/MatrixMath.h"
+#include "TextureManager.h"
 
-void Skydome::Initialize(Model* model,uint32_t textureHandle,const ViewProjection* viewProjection) {
-	model_ = model;
-	viewProjection_ = viewProjection;
-	textureHandle_ = textureHandle;
-	worldTransform_.scale_ = { 1.0f,1.0f,1.0f };
-	worldTransform_.rotation_ = { 0.0f,0.0f,0.0f };
-	worldTransform_.translation_ = { 0.0f,0.0f,0.0f };
+void Skydome::Initialize() {
+	worldTransform_.Initialize();
+	model_ = Model::CreateFromOBJ("Skydome", true);
+	////テクスチャハンドル
+	//textureHandle_ = TextureManager::Load("skydome/Skydome.jpg");
 
 }
 
 void Skydome::Update() {
-	worldTransform_.matWorld_ = MatrixMath::MakeAffineMatrix(
-		worldTransform_.scale_,
-		worldTransform_.rotation_,
-		worldTransform_.translation_
-	);
-	worldTransform_.TransferMatrix();
+
 }
 
-void Skydome::Draw() {
+void Skydome::Draw(const ViewProjection& viewProjection) {
 
-	model_->Draw(worldTransform_,*viewProjection_,textureHandle_);
+	model_->Draw(worldTransform_,viewProjection);
 }
 
 Skydome::~Skydome() {

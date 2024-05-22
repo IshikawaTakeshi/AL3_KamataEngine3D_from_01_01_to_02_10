@@ -11,7 +11,7 @@ void Player::Initialize() {
 
 
 void Player::Update() {
-	worldTransform_.translation_ = { 0.0f,2.0f,0.0f };
+	worldTransform_.translation_ = { 2.0f,2.0f,0.0f };
 	worldTransform_.UpdateMatrix();
 	//行列を定数バッファに転送
 	worldTransform_.TransferMatrix();

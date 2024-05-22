@@ -10,6 +10,7 @@
 #include "DebugCamera.h"
 #include "Player.h"
 #include "Skydome.h"
+#include "MapChipField.h"
 
 #include <vector>
 
@@ -66,4 +67,8 @@ private: // メンバ変数
 	//ブロック
 	Model* modelBlock_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+
+	void GenerateBlocks();
+	//マップチップフィールド
+	MapChipField* mapChipField_ = nullptr;
 };

@@ -19,7 +19,34 @@ GameScene::~GameScene() {
 	}
 	worldTransformBlocks_.clear();
 	delete debugCamera_;
+	delete mapChipField_;
 }
+
+//ブロックの生成
+void GameScene::GenerateBlocks() {
+	//要素数
+	const uint32_t kNumblockVirtical = mapChipField_->GetNumBlockVirtical();
+	const uint32_t kNumBlockHorizonal = mapChipField_->GetNumBlockHorizontal();
+
+	//要素数を変更する
+	worldTransformBlocks_.resize(kNumblockVirtical);
+	for (uint32_t i = 0; i < kNumblockVirtical; i++) {
+		worldTransformBlocks_[i].resize(kNumBlockHorizonal);
+	}
+
+	//	ブロックの生成
+	for (uint32_t row = 0; row < kNumblockVirtical; row++) {
+		for (uint32_t column = 0; column < kNumBlockHorizonal; column++) {
+			if (mapChipField_->GetMapChipTypeByIndex(column,row) == MapChipType::kBlock) {
+				WorldTransform* worldTransform = new WorldTransform();
+				worldTransform->Initialize();
+				worldTransformBlocks_[row][column] = worldTransform;
+				worldTransformBlocks_[row][column]->translation_ = mapChipField_->GetMapChipPositionByIndex(column,row);
+			}
+		}
+	}
+}
+
 
 
 void GameScene::Initialize() {
@@ -27,6 +54,10 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+
+	//マップチップフィールド生成
+	mapChipField_ = new MapChipField();
+	mapChipField_->LoadMapChipCsv("Resources/AL3_MapChip.csv");
 
 	//カメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
@@ -44,30 +75,8 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	player_->Initialize();
 
-	//要素数
-	const uint32_t kNumblockVirtical = 10;
-	const uint32_t kNumBlockHorizonal = 20;
-	//ブロック1個分の横幅
-	const float kBlockWidth = 2.0f;
-	const float kBlockHeight = 2.0f;
-	//要素数を変更する
-	worldTransformBlocks_.resize(kNumblockVirtical);
-	for (uint32_t i = 0; i < kNumblockVirtical; i++) {
-		worldTransformBlocks_[i].resize(kNumBlockHorizonal);
-	}
-
-	//	ブロックの生成
-	for (uint32_t row = 0; row < kNumblockVirtical; row++) {
-		for (uint32_t column = 0; column < kNumBlockHorizonal; column++) {
-
-			worldTransformBlocks_[row][column] = new WorldTransform();
-			worldTransformBlocks_[row][column]->Initialize();
-			if ((row + column) % 2 == 0) {
-				worldTransformBlocks_[row][column]->translation_.x = kBlockWidth * column;
-				worldTransformBlocks_[row][column]->translation_.y = kBlockHeight * row;
-			}
-		}
-	}
+	//ブロックの生成
+	GenerateBlocks();
 
 	//天球の生成
 	skydome_ = new Skydome();
@@ -79,9 +88,9 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-	//プレイヤーの更新処理
-	player_->Update();
-
+	//天球の更新処理
+	skydome_->Update();
+	
 	//ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -91,7 +100,9 @@ void GameScene::Update() {
 			worldTransformBlock->UpdateMatrix();
 		}
 	}
-	skydome_->Update();
+
+	//プレイヤーの更新処理
+	player_->Update();
 
 #ifdef _DEBUG
 
@@ -110,9 +121,6 @@ void GameScene::Update() {
 		//ビュープロジェクション行列の更新と転送
 		viewProjection_.UpdateMatrix();
 	}
-
-
-
 }
 
 void GameScene::Draw() {
@@ -142,18 +150,20 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	//プレイヤー描画
-	player_->Draw(viewProjection_);
+	//天球描画
+	skydome_->Draw(viewProjection_);
 
 	//ブロック描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+			if (!worldTransformBlock)continue;
 			modelBlock_->Draw(*worldTransformBlock, viewProjection_);
 		}
 	}
 
-	//天球描画
-	skydome_->Draw(viewProjection_);
+	//プレイヤー描画
+	player_->Draw(viewProjection_);
+
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

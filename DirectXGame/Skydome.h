@@ -4,6 +4,9 @@
 
 #include <stdint.h>
 
+/// <summary>
+/// 天球
+/// </summary>
 class Skydome {
 public:
 	/// <summary>

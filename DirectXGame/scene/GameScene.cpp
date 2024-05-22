@@ -74,6 +74,7 @@ void GameScene::Initialize() {
 	//プレイヤー生成
 	player_ = new Player();
 	player_->Initialize();
+	player_->SetPos(mapChipField_->GetMapChipPositionByIndex(1, 18));
 
 	//ブロックの生成
 	GenerateBlocks();

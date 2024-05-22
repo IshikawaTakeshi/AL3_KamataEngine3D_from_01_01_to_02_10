@@ -1,5 +1,4 @@
-﻿#include "MyMath.h"
-#include "Novice.h"
+﻿#include "Math/MyMath/MyMath.h"
 #include <cmath>
 
 /////////////////////////////////////////////////////////////////
@@ -69,10 +68,10 @@ Vector3 MyMath::Normalize(const Vector3& v) {
 }
 
 //数値表示
-void MyMath::VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label) {
-	const static int kColumnWidth = 60;
-	Novice::ScreenPrintf(x, y, "%.02f", vector.x);
-	Novice::ScreenPrintf(x + kColumnWidth, y, "%.02f", vector.y);
-	Novice::ScreenPrintf(x + kColumnWidth * 2, y, "%.02f", vector.z);
-	Novice::ScreenPrintf(x + kColumnWidth * 3, y, "%s", label);
-}
+//void MyMath::VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label) {
+//	const static int kColumnWidth = 60;
+//	Novice::ScreenPrintf(x, y, "%.02f", vector.x);
+//	Novice::ScreenPrintf(x + kColumnWidth, y, "%.02f", vector.y);
+//	Novice::ScreenPrintf(x + kColumnWidth * 2, y, "%.02f", vector.z);
+//	Novice::ScreenPrintf(x + kColumnWidth * 3, y, "%s", label);
+//}

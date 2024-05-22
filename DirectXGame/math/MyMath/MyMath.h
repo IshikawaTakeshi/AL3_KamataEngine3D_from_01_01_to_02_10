@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <vector3.h>
+#include "Vector3.h"
 
 class MyMath {
 public:
@@ -25,5 +25,5 @@ public:
 	static Vector3 Normalize(const Vector3& v);
 
 	//数値表示
-	static void VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label);
+	//static void VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label);
 };

@@ -59,7 +59,7 @@ private: // メンバ変数
 	//カメラ
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
-	Matrix4x4 cameraMarix_;
+
 	//プレイヤー
 	Player* player_ = nullptr;
 	//天球

@@ -61,11 +61,6 @@ void GameScene::Initialize() {
 
 	//カメラの生成
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
-	cameraMarix_ = MatrixMath::MakeAffineMatrix(
-		{ 0.0f,0.0f,0.0f },
-		debugCamera_->GetViewProjection().rotation_,
-		debugCamera_->GetViewProjection().translation_
-	);
 
 	//軸方向表示の生成	
 	AxisIndicator::GetInstance()->SetVisible(true);
@@ -107,7 +102,7 @@ void GameScene::Update() {
 
 #ifdef _DEBUG
 
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_C)) {
 		isDebugCameraActive_ = true;
 	}
 #endif // _DEBUG

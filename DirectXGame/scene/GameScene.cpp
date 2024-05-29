@@ -6,6 +6,7 @@
 
 GameScene::GameScene() {}
 
+//解放処理
 GameScene::~GameScene() {
 
 	delete skydome_;
@@ -19,6 +20,7 @@ GameScene::~GameScene() {
 	}
 	worldTransformBlocks_.clear();
 	delete debugCamera_;
+	delete cameraController_;
 	delete mapChipField_;
 }
 
@@ -55,17 +57,15 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
+	//カメラの生成
+	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
+	
+
 	//マップチップフィールド生成
 	mapChipField_ = new MapChipField();
 	mapChipField_->LoadMapChipCsv("Resources/AL3_MapChip.csv");
 
-	//カメラの生成
-	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
-
-	//軸方向表示の生成	
-	AxisIndicator::GetInstance()->SetVisible(true);
-	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
-
+	
 	//プレイヤー生成
 	player_ = new Player();
 	player_->Initialize();
@@ -77,6 +77,16 @@ void GameScene::Initialize() {
 	//天球の生成
 	skydome_ = new Skydome();
 	skydome_->Initialize();
+
+	//カメラコントローラーの生成
+	cameraController_ = new CameraController();
+	cameraController_->Initialize();
+	cameraController_->SetTarget(player_);
+	cameraController_->Reset();
+
+	//軸方向表示の生成	
+	AxisIndicator::GetInstance()->SetVisible(true);
+	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 
 	viewProjection_.Initialize();
 	modelBlock_ = Model::Create();
@@ -99,6 +109,8 @@ void GameScene::Update() {
 
 	//プレイヤーの更新処理
 	player_->Update();
+
+	cameraController_->Update();
 
 #ifdef _DEBUG
 
@@ -147,18 +159,18 @@ void GameScene::Draw() {
 	/// </summary>
 
 	//天球描画
-	skydome_->Draw(viewProjection_);
+	skydome_->Draw(cameraController_->GetViewProjection());
 
 	//ブロック描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)continue;
-			modelBlock_->Draw(*worldTransformBlock, viewProjection_);
+			modelBlock_->Draw(*worldTransformBlock, cameraController_->GetViewProjection());
 		}
 	}
 
 	//プレイヤー描画
-	player_->Draw(viewProjection_);
+	player_->Draw(cameraController_->GetViewProjection());
 
 
 	// 3Dオブジェクト描画後処理

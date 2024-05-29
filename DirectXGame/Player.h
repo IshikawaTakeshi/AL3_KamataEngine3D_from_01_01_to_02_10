@@ -47,6 +47,8 @@ public:
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection);
 
+	const WorldTransform& GetWorldTransform() { return worldTransform_; }
+
 	void SetPos(Vector3 pos) { worldTransform_.translation_ = pos; }
 
 private:

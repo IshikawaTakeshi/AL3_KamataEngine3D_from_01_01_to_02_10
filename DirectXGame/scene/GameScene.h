@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "Skydome.h"
 #include "MapChipField.h"
+#include "CameraController.h"
 
 #include <vector>
 
@@ -59,6 +60,7 @@ private: // メンバ変数
 	//カメラ
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
+	CameraController* cameraController_ = nullptr;
 
 	//プレイヤー
 	Player* player_ = nullptr;

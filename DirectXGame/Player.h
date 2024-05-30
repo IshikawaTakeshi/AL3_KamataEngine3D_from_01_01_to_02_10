@@ -17,21 +17,6 @@ enum class LRDirection {
 class Player {
 public:
 
-	//加速率
-	static inline const float kAcceleration = 0.01f;
-	//加速減衰率
-	static inline const float kAttenuation = 0.18f;
-	//最大速度制限
-	static inline const float kLimitRunSpeed = 0.5f;
-	//旋回時間<秒>
-	static inline const float kTimeTurn = 0.3f;
-	//重力加速度(下方向}
-	static inline const float kGravityAcceleration = 0.01f;
-	//最大落下速度(下方向)
-	static inline const float kLimitFallSpeed = 0.6f;
-	//ジャンプ初速(上方向)
-	static inline const float kjumpAcceleration = 0.3f;
-
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -47,11 +32,36 @@ public:
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection);
 
+	/// <summary>
+	/// worldTransformの取得
+	/// </summary>
 	const WorldTransform& GetWorldTransform() { return worldTransform_; }
+
+	/// <summary>
+	/// velosityの取得
+	/// </summary>
+	const Vector3& GetVelosity()const { return velosity_; }
 
 	void SetPos(Vector3 pos) { worldTransform_.translation_ = pos; }
 
+
+
 private:
+
+	//加速率
+	static inline const float kAcceleration = 0.01f;
+	//加速減衰率
+	static inline const float kAttenuation = 0.18f;
+	//最大速度制限
+	static inline const float kLimitRunSpeed = 0.5f;
+	//旋回時間<秒>
+	static inline const float kTimeTurn = 0.3f;
+	//重力加速度(下方向}
+	static inline const float kGravityAcceleration = 0.01f;
+	//最大落下速度(下方向)
+	static inline const float kLimitFallSpeed = 0.6f;
+	//ジャンプ初速(上方向)
+	static inline const float kjumpAcceleration = 0.3f;
 
 	//ワールド変換データ
 	WorldTransform worldTransform_;

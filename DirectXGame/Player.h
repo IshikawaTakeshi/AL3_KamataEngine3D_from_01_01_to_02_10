@@ -20,7 +20,7 @@ public:
 
 	//マップとの当たり判定情報
 	struct CollisionMapInfo {
-		bool touchLoof = false; //天井衝突フラグ
+		bool touchCeiling = false; //天井衝突フラグ
 		bool onGround_ = false; //接地状態フラ
 		bool touchWall = false; //壁接触フラグ
 		Vector3 move; //移動量
@@ -35,6 +35,10 @@ public:
 
 		kNumCorner //要素数
 	};
+
+	
+
+	Vector3 operator+=(const Vector3& v) const;
 
 	/// <summary>
 	/// 初期化
@@ -83,6 +87,16 @@ public:
 	void IsCollitionLeft(CollisionMapInfo& info);
 
 	/// <summary>
+	/// 衝突判定結果を反映した移動処理
+	/// </summary>
+	void MovementByCollision(const CollisionMapInfo& info);
+
+	/// <summary>
+	/// 天井に接触している場合の処理
+	/// </summary>
+	void ProcessWhenTouchCeiling(const CollisionMapInfo& info);
+
+	/// <summary>
 	/// 指定した角の座標計算
 	/// </summary>
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
@@ -99,7 +113,9 @@ public:
 
 	void SetPos(Vector3 pos) { worldTransform_.translation_ = pos; }
 
-	void SetMapChipField(MapChipField* mapChipField) { mapChipfield_ = mapChipField; }
+	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
+
+	
 
 
 
@@ -122,9 +138,11 @@ private:
 	//キャラクターの当たり判定のサイズ
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
+	
+	static inline const float kBlank = 2.0f;
 
 	//マップチップフィールド
-	MapChipField* mapChipfield_ = nullptr;
+	MapChipField* mapChipField_ = nullptr;
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//ビュープロジェクション
@@ -137,6 +155,8 @@ private:
 	Vector3 acceleration_ = {};
 	//プレイヤーの向き
 	LRDirection lrDirection_ = LRDirection::kRight;
+	//衝突情報を初期化
+	CollisionMapInfo collisionMapInfo;
 	//旋回開始時の角度
 	float turnFirstRotationY_ = 0.0f;
 	//旋回タイマー

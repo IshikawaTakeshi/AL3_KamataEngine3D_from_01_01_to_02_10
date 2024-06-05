@@ -2,9 +2,12 @@
 #include "Player.h"
 #include "Math/MyMath/MyMath.h"
 #include "Math/MyMath/Easing.h"
+#include "MapChipField.h"
+#include "DebugText.h"
 #include <algorithm>
 #include <numbers>
 #include <cassert>
+
 
 void Player::Initialize() {
 	//worldTransform初期化
@@ -22,7 +25,7 @@ void Player::Update() {
 
 	//接地状態
 	if (onGround_) {
-#pragma region 移動入力
+#pragma region 1.移動入力
 		//======================= 左右移動操作 ========================//
 		if (Input::GetInstance()->PushKey(DIK_A) ||
 			Input::GetInstance()->PushKey(DIK_D) ||
@@ -86,15 +89,14 @@ void Player::Update() {
 
 #pragma endregion
 
-#pragma region 衝突判定
+#pragma region 2.衝突判定
 
-		//衝突情報を初期化
-		CollisionMapInfo collisionMapInfo;
+		
 		//移動量に速度の値をコピー
 		collisionMapInfo.move = velosity_;
 
 		//マップ衝突チェック
-
+		IsCollitionTop(collisionMapInfo);
 
 #pragma endregion
 
@@ -131,9 +133,15 @@ void Player::Update() {
 	}
 #pragma endregion
 
+#pragma region 3.判定結果を反映した移動
 	//移動
-	worldTransform_.translation_ = MyMath::Add(worldTransform_.translation_, velosity_);
+	MovementByCollision(collisionMapInfo);
+	//worldTransform_.translation_ = MyMath::Add(worldTransform_.translation_, velosity_);
 
+	//4
+	ProcessWhenTouchCeiling(collisionMapInfo);
+
+#pragma endregion
 
 #pragma region 接地状態切り替え
 	//接地判定
@@ -160,7 +168,7 @@ void Player::Update() {
 	}
 #pragma endregion
 
-#pragma region 旋回制御
+#pragma region 7.旋回制御
 	//======================== 旋回制御 =======================//
 
 	if (turnTimer_ > 0.0f) {
@@ -185,7 +193,7 @@ void Player::Update() {
 	}
 #pragma endregion
 
-#pragma region 行列の更新
+#pragma region 8.行列の更新
 	worldTransform_.UpdateMatrix();
 	//行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
@@ -299,15 +307,66 @@ void Player::Move() {
 
 void Player::IsCollitionTop(CollisionMapInfo& info) {
 	
+	//上昇しているかどうか
+	if (info.move.y <= 0) {
+		return;
+	}
+
 	//移動後の4つの角の座標
 	std::array<Vector3,4> positionsNew;
 
 	for (uint32_t i = 0; i < positionsNew.size(); i++) {
-		positionsNew[i] = CornerPosition(MyMath::Add(worldTransform_.translation_, info.move),
+		positionsNew[i] = CornerPosition(
+			MyMath::Add(worldTransform_.translation_, info.move),
 			static_cast<Corner>(i));
+	}
+
+	MapChipType mapchipType;
+	//真上の当たり判定を行う
+	bool hit = false;
+	//左上点の判定
+	MapChipField::IndexSet indexSet;
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
+	mapchipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (mapchipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	//右上点の当たり判定
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kRightTop]);
+	mapchipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (mapchipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	//ブロックに衝突したかどうか
+	if (hit == true) {
+		
+		//左上
+		//めり込みを排除する方向に移動量をせっていする
+		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
+		//めり込み先ブロックの範囲矩形
+		MapChipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+		info.move.y = std::max(0.0f, info.move.y);
+		//天井に当たったことを記録する
+		info.touchCeiling = true;
+
 	}
 }
 
+
+void Player::MovementByCollision(const CollisionMapInfo& info) {
+	worldTransform_.translation_ = MyMath::Add(worldTransform_.translation_, info.move);
+}
+
+void Player::ProcessWhenTouchCeiling(const CollisionMapInfo& info) {
+
+	//天井に接触している場合
+	if (info.touchCeiling == true) {
+		DebugText::GetInstance()->ConsolePrintf("hit ceiling\n");
+		velosity_.y = 0;
+	}
+}
 
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 

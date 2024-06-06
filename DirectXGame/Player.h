@@ -21,7 +21,7 @@ public:
 	//マップとの当たり判定情報
 	struct CollisionMapInfo {
 		bool touchCeiling = false; //天井衝突フラグ
-		bool onGround = false; //接地状態フラ
+		bool landing = false; //接地状態フラグ
 		bool touchWall = false; //壁接触フラグ
 		Vector3 move; //移動量
 	};
@@ -29,16 +29,12 @@ public:
 	//角
 	enum Corner {
 		kRightBottom, //右下
-		kLeftbottom, //左下
+		kLeftBottom, //左下
 		kRightTop, //右上
 		kLeftTop, //左上
 
 		kNumCorner //要素数
 	};
-
-	
-
-	Vector3 operator+=(const Vector3& v) const;
 
 	/// <summary>
 	/// 初期化
@@ -97,6 +93,10 @@ public:
 	void ProcessWhenTouchCeiling(CollisionMapInfo& info);
 
 	/// <summary>
+	/// 接地状態の切り替え処理
+	/// </summary>
+	void SwitchGroundState(CollisionMapInfo& info);
+	/// <summary>
 	/// 指定した角の座標計算
 	/// </summary>
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
@@ -115,8 +115,6 @@ public:
 
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
-	
-
 
 
 private:
@@ -125,6 +123,8 @@ private:
 	static inline const float kAcceleration = 0.01f;
 	//加速減衰率
 	static inline const float kAttenuation = 0.18f;
+	//着地時の速度減衰率
+	static inline const float kAttenuationLanding = 0.1f;
 	//最大速度制限
 	static inline const float kLimitRunSpeed = 0.5f;
 	//旋回時間<秒>

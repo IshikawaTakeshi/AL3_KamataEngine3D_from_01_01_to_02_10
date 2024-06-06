@@ -21,7 +21,7 @@ public:
 	//マップとの当たり判定情報
 	struct CollisionMapInfo {
 		bool touchCeiling = false; //天井衝突フラグ
-		bool onGround_ = false; //接地状態フラ
+		bool onGround = false; //接地状態フラ
 		bool touchWall = false; //壁接触フラグ
 		Vector3 move; //移動量
 	};
@@ -94,7 +94,7 @@ public:
 	/// <summary>
 	/// 天井に接触している場合の処理
 	/// </summary>
-	void ProcessWhenTouchCeiling(const CollisionMapInfo& info);
+	void ProcessWhenTouchCeiling(CollisionMapInfo& info);
 
 	/// <summary>
 	/// 指定した角の座標計算
@@ -134,12 +134,12 @@ private:
 	//最大落下速度(下方向)
 	static inline const float kLimitFallSpeed = 0.6f;
 	//ジャンプ初速(上方向)
-	static inline const float kjumpAcceleration = 0.3f;
+	static inline const float kJumpAcceleration = 0.3f;
 	//キャラクターの当たり判定のサイズ
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
 	
-	static inline const float kBlank = 2.0f;
+	static inline const float kBlank = 0.04f;
 
 	//マップチップフィールド
 	MapChipField* mapChipField_ = nullptr;

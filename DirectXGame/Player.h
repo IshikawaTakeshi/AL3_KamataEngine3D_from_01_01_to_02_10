@@ -21,7 +21,7 @@ public:
 	//マップとの当たり判定情報
 	struct CollisionMapInfo {
 		bool touchCeiling = false; //天井衝突フラグ
-		bool landing = false; //接地状態フラグ
+		bool landing = false; //着地状態フラグ
 		bool touchWall = false; //壁接触フラグ
 		Vector3 move; //移動量
 	};
@@ -65,12 +65,12 @@ public:
 	/// <summary>
 	/// 上方向衝突判定
 	/// </summary>
-	void IsCollitionTop(CollisionMapInfo& info);
+	void IsCollisionTop(CollisionMapInfo& info);
 
 	/// <summary>
 	/// 下方向衝突判定
 	/// </summary>
-	void IsCollitionBottom(CollisionMapInfo& info);
+	void IsCollisionBottom(CollisionMapInfo& info);
 
 	/// <summary>
 	/// 右方向衝突判定
@@ -109,7 +109,7 @@ public:
 	/// <summary>
 	/// velosityの取得
 	/// </summary>
-	const Vector3& GetVelosity()const { return velosity_; }
+	const Vector3& GetVelosity()const { return velocity_; }
 
 	void SetPos(Vector3 pos) { worldTransform_.translation_ = pos; }
 
@@ -124,7 +124,7 @@ private:
 	//加速減衰率
 	static inline const float kAttenuation = 0.18f;
 	//着地時の速度減衰率
-	static inline const float kAttenuationLanding = 0.1f;
+	static inline const float kAttenuationLanding = 0.01f;
 	//最大速度制限
 	static inline const float kLimitRunSpeed = 0.5f;
 	//旋回時間<秒>
@@ -139,7 +139,8 @@ private:
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
 	
-	static inline const float kBlank = 0.04f;
+	static inline const float kBlank = 0.4f;
+	static inline const float kBottomBlank = 0.4f;
 
 	//マップチップフィールド
 	MapChipField* mapChipField_ = nullptr;
@@ -150,7 +151,7 @@ private:
 	//モデル
 	Model* model_ = nullptr;
 	//速度
-	Vector3 velosity_ = {};
+	Vector3 velocity_ = {};
 	//加速度
 	Vector3 acceleration_ = {};
 	//プレイヤーの向き
@@ -163,7 +164,6 @@ private:
 	float turnTimer_ = 0.0f;
 	//接地状態フラグ
 	bool onGround_ = true;
-	//着地フラグ
-	bool landing = false;
+
 };
 

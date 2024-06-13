@@ -75,12 +75,12 @@ public:
 	/// <summary>
 	/// 右方向衝突判定
 	/// </summary>
-	void IsCollitionRight(CollisionMapInfo& info);
+	void IsCollisionRight(CollisionMapInfo& info);
 
 	/// <summary>
 	/// 左方向衝突判定
 	/// </summary>
-	void IsCollitionLeft(CollisionMapInfo& info);
+	void IsCollisionLeft(CollisionMapInfo& info);
 
 	/// <summary>
 	/// 衝突判定結果を反映した移動処理
@@ -91,6 +91,11 @@ public:
 	/// 天井に接触している場合の処理
 	/// </summary>
 	void ProcessWhenTouchCeiling(CollisionMapInfo& info);
+
+	/// <summary>
+	/// 壁に接触している場合の処理
+	/// </summary>
+	void ProcessWhenTouchWall(CollisionMapInfo& info);
 
 	/// <summary>
 	/// 接地状態の切り替え処理
@@ -125,6 +130,8 @@ private:
 	static inline const float kAttenuation = 0.18f;
 	//着地時の速度減衰率
 	static inline const float kAttenuationLanding = 0.01f;
+	//壁接触時の速度減衰率
+	static inline const float kAttenuationWall = 0.5f;
 	//最大速度制限
 	static inline const float kLimitRunSpeed = 0.5f;
 	//旋回時間<秒>
@@ -136,11 +143,11 @@ private:
 	//ジャンプ初速(上方向)
 	static inline const float kJumpAcceleration = 0.3f;
 	//キャラクターの当たり判定のサイズ
-	static inline const float kWidth = 0.8f;
-	static inline const float kHeight = 0.8f;
+	static inline const float kWidth = 1.8f;
+	static inline const float kHeight = 1.8f;
 	
-	static inline const float kBlank = 0.4f;
-	static inline const float kBottomBlank = 0.4f;
+	static inline const float kBlank = 0.02f;
+	static inline const float kBottomBlank = 0.05f;
 
 	//マップチップフィールド
 	MapChipField* mapChipField_ = nullptr;

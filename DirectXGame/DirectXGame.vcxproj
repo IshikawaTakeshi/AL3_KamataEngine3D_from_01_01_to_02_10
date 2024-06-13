@@ -115,6 +115,7 @@
     <ClCompile Include="MapChipField.cpp" />
     <ClCompile Include="math\MyMath\MatrixMath.cpp" />
     <ClCompile Include="math\MyMath\MyMath.cpp" />
+    <ClCompile Include="math\Vector3.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="Skydome.cpp" />

@@ -55,7 +55,7 @@ private:
 	//座標補間割合
 	static inline const float kInterpolationRate = 0.05f;
 	//速度掛け率
-	static inline const float kVelosityBias = 31.3f;
+	static inline const float kVelocityBias = 31.3f;
 	//追従対象の各方向へのカメラ移動範囲
 	static inline const Rect movableAreaMargin_ = { -20.0f,20.0f,-20.0f,20.0f };
 

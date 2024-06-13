@@ -11,6 +11,7 @@ GameScene::~GameScene() {
 
 	delete skydome_;
 	delete modelBlock_;
+	delete enemy_;
 	delete player_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -27,17 +28,17 @@ GameScene::~GameScene() {
 //ブロックの生成
 void GameScene::GenerateBlocks() {
 	//要素数
-	const uint32_t kNumblockVirtical = mapChipField_->GetNumBlockVirtical();
+	const uint32_t kNumBlockVertical = mapChipField_->GetNumBlockVirtical();
 	const uint32_t kNumBlockHorizonal = mapChipField_->GetNumBlockHorizontal();
 
 	//要素数を変更する
-	worldTransformBlocks_.resize(kNumblockVirtical);
-	for (uint32_t i = 0; i < kNumblockVirtical; i++) {
+	worldTransformBlocks_.resize(kNumBlockVertical);
+	for (uint32_t i = 0; i < kNumBlockVertical; i++) {
 		worldTransformBlocks_[i].resize(kNumBlockHorizonal);
 	}
 
 	//	ブロックの生成
-	for (uint32_t row = 0; row < kNumblockVirtical; row++) {
+	for (uint32_t row = 0; row < kNumBlockVertical; row++) {
 		for (uint32_t column = 0; column < kNumBlockHorizonal; column++) {
 			if (mapChipField_->GetMapChipTypeByIndex(column,row) == MapChipType::kBlock) {
 				WorldTransform* worldTransform = new WorldTransform();
@@ -71,6 +72,10 @@ void GameScene::Initialize() {
 	player_->Initialize();
 	player_->SetPos(mapChipField_->GetMapChipPositionByIndex(1, 18));
 	player_->SetMapChipField(mapChipField_);
+
+	enemy_ = new Enemy();
+	enemy_->Initialize();
+	enemy_->SetPos(mapChipField_->GetMapChipPositionByIndex(1, 20));
 
 	//ブロックの生成
 	GenerateBlocks();
@@ -110,6 +115,8 @@ void GameScene::Update() {
 
 	//プレイヤーの更新処理
 	player_->Update();
+	//エネミーの更新処理	
+	enemy_->Update();
 
 	cameraController_->Update();
 
@@ -172,7 +179,8 @@ void GameScene::Draw() {
 
 	//プレイヤー描画
 	player_->Draw(cameraController_->GetViewProjection());
-
+	//エネミーの描画
+	enemy_->Draw(debugCamera_->GetViewProjection());
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

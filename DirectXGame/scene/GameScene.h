@@ -9,6 +9,7 @@
 #include "WorldTransform.h"
 #include "DebugCamera.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Skydome.h"
 #include "MapChipField.h"
 #include "CameraController.h"
@@ -64,6 +65,8 @@ private: // メンバ変数
 
 	//プレイヤー
 	Player* player_ = nullptr;
+	//エネミー
+	Enemy* enemy_ = nullptr;
 	//天球
 	Skydome* skydome_ = nullptr;
 	//ブロック

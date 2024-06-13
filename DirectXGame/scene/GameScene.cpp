@@ -75,8 +75,8 @@ void GameScene::Initialize() {
 
 	enemy_ = new Enemy();
 	enemy_->Initialize();
-	enemy_->SetPos(mapChipField_->GetMapChipPositionByIndex(1, 20));
-
+	enemy_->SetPos(mapChipField_->GetMapChipPositionByIndex(10, 18));
+	enemy_->SetMapChipField(mapChipField_);
 	//ブロックの生成
 	GenerateBlocks();
 
@@ -180,7 +180,7 @@ void GameScene::Draw() {
 	//プレイヤー描画
 	player_->Draw(cameraController_->GetViewProjection());
 	//エネミーの描画
-	enemy_->Draw(debugCamera_->GetViewProjection());
+	enemy_->Draw(cameraController_->GetViewProjection());
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

@@ -1,4 +1,5 @@
 ﻿#include "Enemy.h"
+#include "Math/MyMath/Easing.h"
 #include <numbers>
 
 Enemy::~Enemy() {
@@ -7,15 +8,39 @@ Enemy::~Enemy() {
 }
 
 void Enemy::Initialize() {
+
+	velocity_ = { -kWalkSpeed, 0, 0 };
 	//worldTransform初期化
 	worldTransform_.Initialize();
 	//初期回転
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
 	//モデル初期化
-	model_ = model_ = Model::CreateFromOBJ("enemyPieroFace", true);
+	model_ = Model::CreateFromOBJ("enemyPieroFace", true);
+	//アニメーション経過時間の初期化
+	walkTimer_ = 0.0f;
 }
 
 void Enemy::Update() {
+
+	//タイマーの加算
+	walkTimer_ += 1.0f / 60.0f;
+
+	//回転アニメーション
+	float param = std::sin(2.0f * std::numbers::pi_v<float> * (walkTimer_ / kWalkMotionTime));
+	float radian = kWalkMotionAngleStart + kWalkMotionAngleEnd * (param + 1.0f) / 2.0f;
+	//状態に応じた角度を取得する
+	float destinationRotationZ = radian;
+	worldTransform_.rotation_.z = Easing::Liner(
+		destinationRotationZ,
+		kWalkMotionAngleStart,
+		Easing::EaseOut(walkTimer_)
+	);
+
+	if (walkTimer_ >= kWalkMotionTime) {
+		walkTimer_ = 0;
+	}
+
+	worldTransform_.translation_ += velocity_;
 
 #pragma region 行列の更新
 	worldTransform_.UpdateMatrix();

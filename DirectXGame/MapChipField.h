@@ -40,8 +40,8 @@ public:
 	static inline const float kBlockHeight = 2.0f;
 
 	//ブロックの個数
-	static inline const uint32_t kNumBlockVirtical = 20;
-	static inline const uint32_t kNumBlockHorizontal = 20;
+	static inline const uint32_t kNumBlockVertical = 20;
+	static inline const uint32_t kNumBlockHorizontal = 45;
 
 	/// <summary>
 	/// 読み込み済みをリセットする関数
@@ -75,7 +75,7 @@ public:
 
 
 
-	uint32_t GetNumBlockVirtical() { return kNumBlockVirtical; }
+	uint32_t GetNumBlockVirtical() { return kNumBlockVertical; }
 	uint32_t GetNumBlockHorizontal() { return kNumBlockHorizontal; }
 
 private:

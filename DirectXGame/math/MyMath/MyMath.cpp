@@ -32,6 +32,14 @@ Vector3 MyMath::Multiply(float scalar, const Vector3& v) {
 	return result;
 }
 
+Vector3 MyMath::Divide(float scalar, const Vector3& v) {
+	Vector3 result;
+	result.x = scalar / v.x;
+	result.y = scalar / v.y;
+	result.z = scalar / v.z;
+	return result;
+}
+
 //内積
 float MyMath::Dot(const Vector3& v1, const Vector3& v2) {
 	float result;

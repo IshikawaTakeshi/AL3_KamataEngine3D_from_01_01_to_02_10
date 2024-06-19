@@ -26,19 +26,14 @@ void Enemy::Update() {
 	walkTimer_ += 1.0f / 60.0f;
 
 	//回転アニメーション
-	float param = std::sin(2.0f * std::numbers::pi_v<float> * (walkTimer_ / kWalkMotionTime));
+	float param = std::sin(2.0f * std::numbers::pi_v<float> * walkTimer_ / kWalkMotionTime);
 	float radian = kWalkMotionAngleStart + kWalkMotionAngleEnd * (param + 1.0f) / 2.0f;
 	//状態に応じた角度を取得する
-	float destinationRotationZ = radian;
 	worldTransform_.rotation_.z = Easing::Liner(
-		destinationRotationZ,
-		kWalkMotionAngleStart,
+		radian,
+		kWalkMotionAngleEnd,
 		Easing::EaseOut(walkTimer_)
 	);
-
-	if (walkTimer_ >= kWalkMotionTime) {
-		walkTimer_ = 0;
-	}
 
 	worldTransform_.translation_ += velocity_;
 

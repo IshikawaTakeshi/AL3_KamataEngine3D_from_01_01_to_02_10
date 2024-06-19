@@ -34,11 +34,11 @@ public:
 private:
 
 	//歩行の速さ
-	static inline const float kWalkSpeed = 0.1f;
+	static inline const float kWalkSpeed = 0.05f;
 	//最初の角度[度]
-	static inline const float kWalkMotionAngleStart = 0.0f;
+	static inline const float kWalkMotionAngleStart = 60.0f / 180.0f;
 	//最後の角度[度]
-	static inline const float kWalkMotionAngleEnd = 3.0f;
+	static inline const float kWalkMotionAngleEnd = 0.0f / 180.0f;
 	//アニメーションの周期となる時間[秒]
 	static inline const float kWalkMotionTime = 1.0f;
 

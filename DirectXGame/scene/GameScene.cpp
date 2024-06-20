@@ -14,6 +14,7 @@ GameScene::~GameScene() {
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
+	delete deathParticles_;
 
 	delete player_;
 
@@ -91,6 +92,10 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 	skydome_->Initialize();
 
+	//デス演出用パーティクルの生成
+	deathParticles_ = new DeathParticles();
+	deathParticles_->Initialize(player_->GetWorldPos());
+
 	//カメラコントローラーの生成
 	cameraController_ = new CameraController();
 	cameraController_->Initialize();
@@ -125,6 +130,11 @@ void GameScene::Update() {
 	//エネミーの更新処理	
 	for (Enemy* enemy : enemies_) {
 		enemy->Update();
+	}
+
+	//デス演出用パーティクルの更新
+	if (deathParticles_) {
+		deathParticles_->Update();
 	}
 
 	//すべての衝突判定
@@ -196,6 +206,11 @@ void GameScene::Draw() {
 	//エネミーの描画
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw(cameraController_->GetViewProjection());
+	}
+
+	//デス演出用パーティクルの更新
+	if (deathParticles_) {
+		deathParticles_->Draw(cameraController_->GetViewProjection());
 	}
 
 	// 3Dオブジェクト描画後処理

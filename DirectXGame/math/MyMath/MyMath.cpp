@@ -1,5 +1,6 @@
 ﻿#include "Math/MyMath/MyMath.h"
 #include <cmath>
+#include <numbers>
 
 /////////////////////////////////////////////////////////////////
 ///		Vector3
@@ -73,6 +74,10 @@ Vector3 MyMath::Normalize(const Vector3& v) {
 	result.y = v.y / length;
 	result.z = v.z / length;
 	return result;
+}
+
+float MyMath::DEG2RAD(const float& deg) {
+	return (deg / 180.0f)* std::numbers::pi_v<float>;
 }
 
 //数値表示

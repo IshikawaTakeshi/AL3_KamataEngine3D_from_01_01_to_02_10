@@ -81,8 +81,6 @@ void Player::Update() {
 
 #pragma region 8.行列の更新
 	worldTransform_.UpdateMatrix();
-	//行列を定数バッファに転送
-	worldTransform_.TransferMatrix();
 #pragma endregion
 }
 

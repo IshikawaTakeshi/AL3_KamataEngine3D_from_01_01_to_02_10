@@ -1,5 +1,6 @@
 ﻿#include "Enemy.h"
 #include "Math/MyMath/Easing.h"
+#include "Math/MyMath/MyMath.h"
 #include <numbers>
 
 Enemy::~Enemy() {
@@ -30,7 +31,7 @@ void Enemy::Update() {
 	float radian = kWalkMotionAngleStart + kWalkMotionAngleEnd * (param + 1.0f) / 2.0f;
 	//状態に応じた角度を取得する
 	worldTransform_.rotation_.z = Easing::Liner(
-		radian,
+		MyMath::DEG2RAD(radian),
 		kWalkMotionAngleEnd,
 		Easing::EaseOut(walkTimer_)
 	);

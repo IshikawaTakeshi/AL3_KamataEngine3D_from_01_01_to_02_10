@@ -27,6 +27,7 @@ public:
 	//正規化
 	static Vector3 Normalize(const Vector3& v);
 
-	//数値表示
-	//static void VectorScreenPrintf(int x, int y, const Vector3& vector, const char* label);
+	//角度θをラジアンに変換
+	static float DEG2RAD(const float& deg);
+
 };

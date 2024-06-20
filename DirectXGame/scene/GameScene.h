@@ -8,11 +8,13 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "DebugCamera.h"
+
 #include "Player.h"
 #include "Enemy.h"
 #include "Skydome.h"
 #include "MapChipField.h"
 #include "CameraController.h"
+#include "DeathParticles.h"
 
 #include <vector>
 
@@ -79,6 +81,8 @@ private: // メンバ変数
 	//ブロック
 	Model* modelBlock_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+	//デス演出用パーティクル
+	DeathParticles* deathParticles_ = nullptr;
 
 	void GenerateBlocks();
 	//マップチップフィールド

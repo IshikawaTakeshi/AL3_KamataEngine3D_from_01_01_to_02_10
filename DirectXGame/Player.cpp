@@ -491,3 +491,21 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 
 	return MyMath::Add(center, offsetTable[static_cast<uint32_t>(corner)]);
 }
+
+void Player::OnCollision(const Enemy* enemy) {
+	(void)enemy;
+
+	//ジャンプさせる
+	velocity_.y += 1.0f;
+}
+
+AABB Player::GetAABB() {
+	
+	Vector3 worldPos = GetWorldPos();
+
+	AABB aabb;
+	aabb.min = { worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f };
+	aabb.max = { worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f };
+
+	return aabb;
+}

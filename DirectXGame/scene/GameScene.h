@@ -43,9 +43,16 @@ public: // メンバ関数
 	void Update();
 
 	/// <summary>
-	/// 描画
+	/// 描画処理
 	/// </summary>
 	void Draw();
+
+	/// <summary>
+	/// すべての当たり判定を行う処理
+	/// </summary>
+	void CheckAllCollisions();
+
+
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -66,7 +73,7 @@ private: // メンバ変数
 	//プレイヤー
 	Player* player_ = nullptr;
 	//エネミー
-	Enemy* enemy_ = nullptr;
+	std::list<Enemy*> enemies_;
 	//天球
 	Skydome* skydome_ = nullptr;
 	//ブロック

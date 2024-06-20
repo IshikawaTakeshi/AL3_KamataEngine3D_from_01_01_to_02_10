@@ -5,8 +5,10 @@
 #include "Sprite.h"
 #include "WorldTransform.h"
 #include "ViewProjection.h"
+#include "AABB.h"
 
 class MapChipField;
+class Enemy;
 enum class LRDirection {
 	kRight,
 	kLeft,
@@ -58,11 +60,6 @@ public:
 	void Move();
 
 	/// <summary>
-	/// 衝突判定
-	/// </summary>
-	void Collision(CollisionMapInfo& info);
-
-	/// <summary>
 	/// 上方向衝突判定
 	/// </summary>
 	void IsCollisionTop(CollisionMapInfo& info);
@@ -112,9 +109,24 @@ public:
 	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 
 	/// <summary>
-	/// velosityの取得
+	/// velocityの取得
 	/// </summary>
-	const Vector3& GetVelosity()const { return velocity_; }
+	const Vector3& GetVelocity() { return velocity_; }
+
+	/// <summary>
+	/// ワールド座標の取得
+	/// </summary>
+	const Vector3& GetWorldPos() { return worldTransform_.translation_; }
+
+	/// <summary>
+	/// 衝突応答
+	/// </summary>
+	void OnCollision(const Enemy* enemy);
+
+	/// <summary>
+	/// AABBの取得
+	/// </summary>
+	AABB GetAABB();
 
 	void SetPos(Vector3 pos) { worldTransform_.translation_ = pos; }
 
@@ -143,8 +155,8 @@ private:
 	//ジャンプ初速(上方向)
 	static inline const float kJumpAcceleration = 0.3f;
 	//キャラクターの当たり判定のサイズ
-	static inline const float kWidth = 1.8f;
-	static inline const float kHeight = 1.8f;
+	static inline const float kWidth = 1.8f; //横幅
+	static inline const float kHeight = 1.8f; //縦幅
 	
 	static inline const float kBlank = 0.02f;
 	static inline const float kBottomBlank = 0.05f;

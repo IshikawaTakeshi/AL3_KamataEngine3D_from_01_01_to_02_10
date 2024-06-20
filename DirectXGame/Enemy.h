@@ -2,8 +2,10 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include "ViewProjection.h"
+#include "AABB.h"
 
 class MapChipField;
+class Player;
 class Enemy {
 public:
 
@@ -26,6 +28,20 @@ public:
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection);
 
+	/// <summary>
+	/// 衝突応答
+	/// </summary>
+	void OnCollision(const Player* player);
+	/// <summary>
+	/// ワールド座標の取得
+	/// </summary>
+	const Vector3& GetWorldPos() { return worldTransform_.translation_; }
+
+	/// <summary>
+	/// AABBの取得
+	/// </summary>
+	AABB GetAABB();
+
 
 	void SetPos(Vector3 pos) { worldTransform_.translation_ = pos; }
 
@@ -41,6 +57,9 @@ private:
 	static inline const float kWalkMotionAngleEnd = 0.0f / 180.0f;
 	//アニメーションの周期となる時間[秒]
 	static inline const float kWalkMotionTime = 1.0f;
+	//キャラクターの当たり判定のサイズ
+	static inline const float kWidth = 1.8f; //横幅
+	static inline const float kHeight = 1.8f; //縦幅
 
 	//速度
 	Vector3 velocity_;

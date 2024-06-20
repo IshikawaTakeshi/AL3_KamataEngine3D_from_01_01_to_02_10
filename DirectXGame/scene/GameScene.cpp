@@ -11,7 +11,10 @@ GameScene::~GameScene() {
 
 	delete skydome_;
 	delete modelBlock_;
-	delete enemy_;
+	for (Enemy* enemy : enemies_) {
+		delete enemy;
+	}
+
 	delete player_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -73,10 +76,14 @@ void GameScene::Initialize() {
 	player_->SetPos(mapChipField_->GetMapChipPositionByIndex(1, 18));
 	player_->SetMapChipField(mapChipField_);
 
-	enemy_ = new Enemy();
-	enemy_->Initialize();
-	enemy_->SetPos(mapChipField_->GetMapChipPositionByIndex(10, 18));
-	enemy_->SetMapChipField(mapChipField_);
+	//エネミー生成
+	for (int32_t i = 0; i < 2; ++i) {
+		Enemy* newEnemy = new Enemy();
+		newEnemy->Initialize();
+		newEnemy->SetPos(mapChipField_->GetMapChipPositionByIndex(6 + i, 17 + i));
+		enemies_.push_back(newEnemy);
+	}
+
 	//ブロックの生成
 	GenerateBlocks();
 
@@ -116,9 +123,16 @@ void GameScene::Update() {
 	//プレイヤーの更新処理
 	player_->Update();
 	//エネミーの更新処理	
-	enemy_->Update();
+	for (Enemy* enemy : enemies_) {
+		enemy->Update();
+	}
+
+	//すべての衝突判定
+	CheckAllCollisions();
 
 	cameraController_->Update();
+
+
 
 #ifdef _DEBUG
 
@@ -180,7 +194,9 @@ void GameScene::Draw() {
 	//プレイヤー描画
 	player_->Draw(cameraController_->GetViewProjection());
 	//エネミーの描画
-	enemy_->Draw(cameraController_->GetViewProjection());
+	for (Enemy* enemy : enemies_) {
+		enemy->Draw(cameraController_->GetViewProjection());
+	}
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -198,4 +214,42 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+void GameScene::CheckAllCollisions() {
+
+#pragma region PlayerとEnemy
+
+	//判定対象1,2の座標
+	AABB aabb1, aabb2;
+
+	//自キャラの座標
+	aabb1 = player_->GetAABB();
+
+	//自キャラと敵のすべての当たり判定
+	for (Enemy* enemy : enemies_) {
+		//敵の座標
+		aabb2 = enemy->GetAABB();
+
+		//AABB同士の交差判定
+		if (AABB::IsCollision(aabb1, aabb2)) {
+			
+			//自キャラの衝突コールバックを呼び出す
+			player_->OnCollision(enemy);
+
+			//エネミーの衝突コールバック
+			enemy->OnCollision(player_);
+		}
+	}
+
+#pragma endregion
+
+#pragma region PlayerとItem
+
+#pragma endregion
+
+#pragma region PlayerBulletとEnemy
+
+#pragma endregion
+
 }

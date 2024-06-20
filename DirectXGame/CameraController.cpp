@@ -18,7 +18,7 @@ void CameraController::Update() {
 	
 	//追従対象とオフセットと追従対象の速度からカメラの目標座標を計算
 	targetPos_ = MyMath::Add(MyMath::Add(
-		targetWorldTransform.translation_, targetOffset_), MyMath::Multiply(kVelocityBias, target_->GetVelosity()));
+		targetWorldTransform.translation_, targetOffset_), MyMath::Multiply(kVelocityBias, target_->GetVelocity()));
 
 	
 	//座標補間によりゆったり追従

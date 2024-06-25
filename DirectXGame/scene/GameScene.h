@@ -8,7 +8,7 @@
 #include "DebugCamera.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-
+#include "Skeleton.h"
 #include <numbers>
 
 
@@ -59,14 +59,11 @@ private: // メンバ変数
 		float length; //ボーンの長さ
 	};
 
-	//ボーン
-	std::vector<Born> born_;
-
-	Model* modelJoint_ = nullptr; //関節のモデル
+	Skeleton* skeleton_;
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
-	Matrix4x4 cameraMarix_;
-	WorldTransform worldTrasform_;
+	Matrix4x4 cameraMatrix_;
+	WorldTransform worldTransform_;
 	std::vector<WorldTransform*> joints_; //関節
 	ViewProjection viewProjection_;
 };

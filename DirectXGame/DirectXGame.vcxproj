@@ -110,6 +110,7 @@
     <ClCompile Include="3d\WorldTransform.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
+    <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyMath\MatrixMath.cpp" />
     <ClCompile Include="MyMath\MyMath.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="base\StringUtility.h" />
     <ClInclude Include="base\TextureManager.h" />
     <ClInclude Include="base\WinApp.h" />
+    <ClInclude Include="Skeleton.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="Lines.h" />
     <ClInclude Include="math\Matrix4x4.h" />

@@ -19,6 +19,7 @@ void DeathParticles::Initialize(Vector3 position) {
 	//カラー初期化
 	
 	color_ = { 1.0f,1.0f,1.0f,1.0f };
+	objectColor_.Initialize();
 }
 
 void DeathParticles::Update() {
@@ -59,7 +60,9 @@ void DeathParticles::Update() {
 
 #pragma region フェードアウト処理
 
-		color_.w = std::clamp()
+		color_.w = std::clamp(counter_, 0.0f, 1.0f);
+		objectColor_.SetColor(color_);
+		objectColor_.TransferMatrix();
 #pragma endregion
 
 #pragma region ワールド行列の更新処理
@@ -81,6 +84,6 @@ void DeathParticles::Draw(const ViewProjection& viewProjection) {
 	}
 	
 	for (size_t i = 0; i < models_.size(); ++i) {
-		models_[i]->Draw(worldTransforms_[i], viewProjection);
+		models_[i]->Draw(worldTransforms_[i], viewProjection, &objectColor_);
 	}
 }

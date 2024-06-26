@@ -4,7 +4,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Vector4.h"
-#include ""
+#include "ObjectColor.h"
 #include <numbers>
 
 #include <array>
@@ -51,7 +51,7 @@ private:
 	
 	//色の数値
 	Vector4 color_;
-
+	ObjectColor objectColor_;
 	//終了フラグ
 	bool isFinished_ = false;
 	//経過時間カウント

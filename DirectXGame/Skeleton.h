@@ -5,36 +5,36 @@
 #include "Model.h"
 
 struct Born {
-	Vector3 tip; //ƒ{[ƒ“‚Ìæ’[
-	Vector3 root; //ƒ{[ƒ“‚Ìª–{
-	Vector3 angle; //ƒ{[ƒ“‚ÌŠp“x
-	float length; //ƒ{[ƒ“‚Ì’·‚³
+	Vector3 tip; //ãƒœãƒ¼ãƒ³ã®å…ˆç«¯
+	Vector3 root; //ãƒœãƒ¼ãƒ³ã®æ ¹æœ¬
+	Vector3 angle; //ãƒœãƒ¼ãƒ³ã®è§’åº¦
+	float length; //ãƒœãƒ¼ãƒ³ã®é•·ã•
 };
 
 class Skeleton {
 public:
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// –ˆƒtƒŒ[ƒ€ˆ—
+	/// æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
-	void Draw(ViewProjection viewProjection);
+	void Draw(const ViewProjection& viewProjection);
 
 private:
-	
-	//ƒ{[ƒ“
+
+	//ãƒœãƒ¼ãƒ³
 	std::vector<Born> born_;
-	std::vector<WorldTransform*> joints_; //ŠÖß
-	Model* modelJoint_ = nullptr; //ŠÖß‚Ìƒ‚ƒfƒ‹
+	std::vector<WorldTransform*> joints_; //é–¢ç¯€
+	Model* modelJoint_ = nullptr; //é–¢ç¯€ã®ãƒ¢ãƒ‡ãƒ«
 
 };
 

@@ -3,19 +3,24 @@
 #include "PrimitiveDrawer.h"
 #include <numbers>
 #include <imgui.h>
+#include <cstdint>
+
+
+//é–¢ç¯€ã®è¦ç´ æ•°
+const uint32_t kNumJointHorizonal = 3;
+
+
 
 void Skeleton::Initialize() {
 
-	//—v‘f”
-	const uint32_t kNumJointHorizonal = 3;
-
-	//ŠÖß1ŒÂ•ª‚Ì‰¡•
+	
+	//é–¢ç¯€1å€‹åˆ†ã®æ¨ªå¹…
 	const float kJointWidth = 2.0f;
 	const float kJointHeight = 2.0f;
-	//—v‘f”‚ğ•ÏX‚·‚é
+	//è¦ç´ æ•°ã‚’å¤‰æ›´ã™ã‚‹
 	joints_.resize(kNumJointHorizonal);
 
-	//ŠÖß‚Ì¶¬
+	//é–¢ç¯€ã®ç”Ÿæˆ
 	for (uint32_t row = 0; row < kNumJointHorizonal; row++) {
 		joints_[row] = new WorldTransform();
 		joints_[row]->Initialize();
@@ -23,11 +28,11 @@ void Skeleton::Initialize() {
 		joints_[row]->translation_.y = kJointWidth;
 	}
 
-	//born‚Ì—v‘f”
+	//bornã®è¦ç´ æ•°
 	const uint32_t kNumBorn = 2;
-	//—v‘f”‚ğ•ÏX
+	//è¦ç´ æ•°ã‚’å¤‰æ›´
 	born_.resize(kNumBorn);
-	//ƒ{[ƒ“‚Ì¶¬
+	//ãƒœãƒ¼ãƒ³ã®ç”Ÿæˆ
 	born_[0] = { {10,0,0}, {0,0,0},{0,0,0},0 };
 	born_[0].length = MyMath::Distance(born_[0].tip, born_[0].root);
 	born_[1] = { {20,0,0}, born_[0].tip,{0,0,0},0 };
@@ -38,43 +43,43 @@ void Skeleton::Initialize() {
 
 void Skeleton::Update() {
 
-	//ƒ{[ƒ“1‚ÌŠp“x‚ÌXV
+	//ãƒœãƒ¼ãƒ³1ã®è§’åº¦ã®æ›´æ–°
 	float born1Numerator = powf(born_[1].tip.x, 2) - powf(born_[1].tip.y, 2)
 		+ powf(born_[0].length, 2) - powf(born_[1].length, 2);
 	float born1Denominator = 2 * born_[0].length
 		* sqrtf(powf(born_[1].tip.x, 2) + powf(born_[1].tip.y, 2));
 
-	//atan‚Ì”ÍˆÍ‚ª-PI/2 ~ PI/2‚È‚Ì‚Åê‡•ª‚¯‚µ‚ÄŒvZ‚·‚é
+	//atanã®ç¯„å›²ãŒ-PI/2 ~ PI/2ãªã®ã§å ´åˆåˆ†ã‘ã—ã¦è¨ˆç®—ã™ã‚‹
 	if (born_[1].tip.x >= 0) {
 
 		born_[0].angle.x = acos(born1Numerator / born1Denominator)
 			+ atan(born_[1].tip.y / born_[1].tip.x);
 
-	} else { //x‚Ì’l‚ªƒ}ƒCƒiƒX‚Ì
+	} else { //xã®å€¤ãŒãƒã‚¤ãƒŠã‚¹ã®æ™‚
 		born_[0].angle.x = acos(born1Numerator / born1Denominator)
 			+ atan(born_[1].tip.y / born_[1].tip.x) + std::numbers::pi_v<float>;
 	}
 
 
-	//ƒ{[ƒ“1‚Ìª–{Eæ’[‚ÌXV
+	//ãƒœãƒ¼ãƒ³1ã®æ ¹æœ¬ãƒ»å…ˆç«¯ã®æ›´æ–°
 	born_[0].root.x = 0;
 	born_[0].root.y = 0;
 	born_[0].tip.x = born_[0].length * cos(born_[0].angle.x);
 	born_[0].tip.y = born_[0].length * sin(born_[0].angle.x);
 
-	//ƒ{[ƒ“2‚ÌŠp“x‚ÌXV
+	//ãƒœãƒ¼ãƒ³2ã®è§’åº¦ã®æ›´æ–°
 	float born2Numerator = powf(born_[0].length, 2) + powf(born_[1].length, 2)
 		- (powf(born_[1].tip.x, 2) + powf(born_[1].tip.y, 2));
 	float born2Denominator = 2 * born_[0].length * born_[1].length;
 	born_[1].angle.x = std::numbers::pi_v<float> +acos(born2Numerator / born2Denominator);
 
-	//ƒ{[ƒ“2‚Ìª–{Eæ’[‚ÌXV
+	//ãƒœãƒ¼ãƒ³2ã®æ ¹æœ¬ãƒ»å…ˆç«¯ã®æ›´æ–°
 	born_[1].root.x = born_[0].length * cos(born_[0].angle.x);
 	born_[1].root.y = born_[0].length * sin(born_[0].angle.x);
 	born_[1].tip.x = born_[1].root.x + born_[1].length * cos(born_[0].angle.x + born_[1].angle.x);
 	born_[1].tip.y = born_[1].root.y + born_[1].length * sin(born_[0].angle.x + born_[1].angle.x);
 
-	//ŠÖß‚ÌXV
+	//é–¢ç¯€ã®æ›´æ–°
 	joints_[0]->translation_ = { born_[0].root.x,born_[0].root.y,born_[0].root.z };
 	joints_[1]->translation_ = { born_[1].root.x,born_[1].root.y,born_[1].root.z };
 	joints_[2]->translation_ = { born_[1].tip.x,born_[1].tip.y,born_[1].tip.z };
@@ -84,7 +89,7 @@ void Skeleton::Update() {
 	joints_[2]->UpdateMatrix();
 
 
-	//ƒ{[ƒ“‚Ì‘€ì
+	//ãƒœãƒ¼ãƒ³ã®æ“ä½œ
 	ImGui::Begin("born_2");
 
 	ImGui::SliderFloat(
@@ -105,13 +110,15 @@ void Skeleton::Update() {
 
 }
 
-void Skeleton::Draw(ViewProjection viewProjection) {
+void Skeleton::Draw(const ViewProjection& viewProjection) {
 
 	for (WorldTransform* worldTransformJoint : joints_) {
 		modelJoint_->Draw(*worldTransformJoint, viewProjection);
 	}
 
-	//ƒ‰ƒCƒ“•`‰æ
+	//ãƒ©ã‚¤ãƒ³æç”»
 	PrimitiveDrawer::GetInstance()->DrawLine3d(born_[0].tip, born_[0].root, { 1.0f,0.0f,0.0f,1.0f });
 	PrimitiveDrawer::GetInstance()->DrawLine3d(born_[1].tip, born_[1].root, { 0.0f,1.0f,0.0f,1.0f });
+
+
 }

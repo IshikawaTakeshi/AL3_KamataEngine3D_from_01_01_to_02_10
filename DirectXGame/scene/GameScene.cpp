@@ -35,6 +35,7 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 
 	//スケルトン初期化
+	skeleton_ = new Skeleton();
 	skeleton_->Initialize();
 
 	viewProjection_.Initialize();
@@ -96,7 +97,7 @@ void GameScene::Draw() {
 	/// </summary>
 
 	//スケルトンの描画処理
-	skeleton_->Draw(&debugCamera_->GetViewProjection());
+	skeleton_->Draw(debugCamera_->GetViewProjection());
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

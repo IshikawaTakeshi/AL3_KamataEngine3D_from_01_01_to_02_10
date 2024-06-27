@@ -43,23 +43,30 @@ void Skeleton::Initialize() {
 
 void Skeleton::Update() {
 
-	//ボーン1の角度の更新
-	float born1Numerator = powf(born_[1].tip.x, 2) - powf(born_[1].tip.y, 2)
+	//ボーン1の角度の更新(angle.x)
+	float born1NumeratorX = powf(born_[1].tip.x, 2) - powf(born_[1].tip.y, 2)
 		+ powf(born_[0].length, 2) - powf(born_[1].length, 2);
-	float born1Denominator = 2 * born_[0].length
+	float born1DenominatorX = 2 * born_[0].length
 		* sqrtf(powf(born_[1].tip.x, 2) + powf(born_[1].tip.y, 2));
+	
 
 	//atanの範囲が-PI/2 ~ PI/2なので場合分けして計算する
 	if (born_[1].tip.x >= 0) {
-
-		born_[0].angle.x = acos(born1Numerator / born1Denominator)
-			+ atan(born_[1].tip.y / born_[1].tip.x);
-
-	} else { //xの値がマイナスの時
-		born_[0].angle.x = acos(born1Numerator / born1Denominator)
-			+ atan(born_[1].tip.y / born_[1].tip.x) + std::numbers::pi_v<float>;
+		born_[0].angle.x = acos(born1NumeratorX / born1DenominatorX) + atan(born_[1].tip.y / born_[1].tip.x);
+	} 
+	else { //xの値がマイナスの時
+		born_[0].angle.x = acos(born1NumeratorX / born1DenominatorX) + atan(born_[1].tip.y / born_[1].tip.x) + std::numbers::pi_v<float>;
 	}
 
+	//ボーン2の角度の更新(angle.y)
+	float born1NumeratorY = powf(born_[1].tip.x, 2) - powf(born_[1].tip.z, 2) + powf(born_[0].length, 2) - powf(born_[1].length, 2);
+	float born1DenominatorY = 2 * born_[0].length * sqrtf(powf(born_[1].tip.x, 2) + powf(born_[1].tip.z, 2));
+
+	if (born_[1].tip.x >= 0) {
+		born_[0].angle.y = acos(born1NumeratorY / born1DenominatorY) + atan(born_[1].tip.z / born_[1].tip.x);
+	} else { // xの値がマイナスの時
+		born_[0].angle.y = acos(born1NumeratorY / born1DenominatorY) + atan(born_[1].tip.z / born_[1].tip.x) + std::numbers::pi_v<float>;
+	}
 
 	//ボーン1の根本・先端の更新
 	born_[0].root.x = 0;
@@ -71,7 +78,7 @@ void Skeleton::Update() {
 	float born2Numerator = powf(born_[0].length, 2) + powf(born_[1].length, 2)
 		- (powf(born_[1].tip.x, 2) + powf(born_[1].tip.y, 2));
 	float born2Denominator = 2 * born_[0].length * born_[1].length;
-	born_[1].angle.x = std::numbers::pi_v<float> +acos(born2Numerator / born2Denominator);
+	born_[1].angle.x = std::numbers::pi_v<float> + acos(born2Numerator / born2Denominator);
 
 	//ボーン2の根本・先端の更新
 	born_[1].root.x = born_[0].length * cos(born_[0].angle.x);
@@ -87,7 +94,6 @@ void Skeleton::Update() {
 	joints_[0]->UpdateMatrix();
 	joints_[1]->UpdateMatrix();
 	joints_[2]->UpdateMatrix();
-
 
 	//ボーンの操作
 	ImGui::Begin("born_2");
@@ -107,7 +113,6 @@ void Skeleton::Update() {
 		"%.3f"
 	);
 	ImGui::End();
-
 }
 
 void Skeleton::Draw(const ViewProjection& viewProjection) {

@@ -1,5 +1,6 @@
 #pragma once
 #include "Vector3.h"
+#include "Matrix4x4.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Model.h"
@@ -7,8 +8,11 @@
 struct Born {
 	Vector3 tip; //ボーンの先端
 	Vector3 root; //ボーンの根本
-	Vector3 angle; //ボーンの角度
+	Vector3 rotation; //ボーンの角度
+	float xyLength;
+	float yzLength;
 	float length; //ボーンの長さ
+	Matrix4x4 worldMatrix;//ワールド行列
 };
 
 class Skeleton {

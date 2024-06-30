@@ -55,17 +55,7 @@ void Skeleton::Update() {
 	//ロール回転(z軸)計算
 	born_[0].rotation.z = atan2(born_[0].tip.y / born_[0].yzLength, born_[0].tip.z / born_[0].yzLength);
 
-    // ボーン1の根本・先端の更新
-    born_[0].root.x = 0;
-    born_[0].root.y = 0;
-    born_[0].tip.x = born_[0].length * cos(born_[0].rotation.x);
-    born_[0].tip.y = born_[0].length * sin(born_[0].rotation.x);
 
-    // ボーン2の根本・先端の更新
-    born_[1].root.x = born_[0].length * cos(born_[0].rotation.x);
-    born_[1].root.y = born_[0].length * sin(born_[0].rotation.x);
-    born_[1].tip.x = born_[1].root.x + born_[1].length * cos(born_[0].rotation.x + born_[1].rotation.x);
-    born_[1].tip.y = born_[1].root.y + born_[1].length * sin(born_[0].rotation.x + born_[1].rotation.x);
 
     // 関節の更新
     joints_[0]->translation_ = { born_[0].root.x, born_[0].root.y, born_[0].root.z };
@@ -77,11 +67,8 @@ void Skeleton::Update() {
 	born_[0].worldMatrix = MatrixMath::MakeAffineMatrix({ 1.0f,1.0f,1.0f }, born_[0].rotation, born_[0].root);
 
 	//ボーンの操作
-	ImGui::Begin("born_2");
-
-	ImGui::SliderFloat("tipTranslateX",&born_[0].tip.x, 0.1f, 20.0f, "%.3f");
-	ImGui::SliderFloat("tipTranslateY",&born_[0].tip.y,-20.0f,20.0f,"%.3f");
-	ImGui::SliderFloat("tipTranslateZ",&born_[0].tip.z,-20.0f,20.0f,"%.3f");
+	ImGui::Begin("born1");
+	ImGui::SliderFloat3("tipTranslate",&born_[0].tip.x, 0.0f, 90.0f, "%.3f");
 	ImGui::End();
 }
 

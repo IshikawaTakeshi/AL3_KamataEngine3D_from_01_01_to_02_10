@@ -49,6 +49,7 @@ void GameScene::Update() {
 	skeleton_->Update();
 
 
+	
 #ifdef _DEBUG
 
 	if (input_->TriggerKey(DIK_SPACE)) {

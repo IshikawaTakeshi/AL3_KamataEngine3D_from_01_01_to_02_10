@@ -35,6 +35,15 @@ public:
 
 private:
 
+
+
+	//ボーンの最大回転角(度)
+	float maxBornRotation_;
+	//ボーンの最小回転角(度)
+	float minBornRotation_;
+
+
+
 	//ボーン
 	std::vector<Born> born_;
 	std::vector<WorldTransform*> joints_; //関節

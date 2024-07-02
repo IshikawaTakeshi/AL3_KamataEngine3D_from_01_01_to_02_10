@@ -4,6 +4,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Model.h"
+#include "Input.h"
 
 struct Born {
 	Vector3 tip; //ボーンの先端
@@ -12,7 +13,7 @@ struct Born {
 	float xyLength;
 	float yzLength;
 	float length; //ボーンの長さ
-	Matrix4x4 worldMatrix;//ワールド行列
+	//WorldTransform worldTransform; //ワールドトランスフォーム
 };
 
 class Skeleton {
@@ -35,6 +36,7 @@ public:
 
 private:
 
+	Input* input_ = nullptr;
 
 
 	//ボーンの最大回転角(度)
@@ -45,7 +47,7 @@ private:
 
 
 	//ボーン
-	std::vector<Born> born_;
+	std::vector<Born> bone_;
 	std::vector<WorldTransform*> joints_; //関節
 	Model* modelJoint_ = nullptr; //関節のモデル
 

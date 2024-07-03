@@ -6,7 +6,7 @@
 #include "Model.h"
 #include "Input.h"
 
-struct Born {
+struct Bone {
 	Vector3 tip; //ボーンの先端
 	Vector3 root; //ボーンの根本
 	Vector3 rotation; //ボーンの角度
@@ -47,9 +47,12 @@ private:
 
 
 	//ボーン
-	std::vector<Born> bone_;
+	std::vector<Bone> bone_;
 	std::vector<WorldTransform*> joints_; //関節
 	Model* modelJoint_ = nullptr; //関節のモデル
+	//目標位置
+	WorldTransform* targetPos_ = nullptr;
+	Model* targetModel_ = nullptr; //目標位置のモデル
 
 };
 

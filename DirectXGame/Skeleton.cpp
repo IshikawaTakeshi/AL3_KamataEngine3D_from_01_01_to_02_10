@@ -159,7 +159,8 @@ void Skeleton::Update() {
 
 	//================================= ボーン2の角度の更新 ==================================//
 
-	float bone2Numerator = powf(bone_[0].length, 2) + powf(bone_[1].length, 2) - (powf(MyMath::Length(bone_[0].root + targetPos_->translation_),2));
+	float root2TargetLength = MyMath::Length(targetPos_->translation_ - bone_[0].root);
+	float bone2Numerator = powf(bone_[0].length, 2) + powf(bone_[1].length, 2) - (powf(root2TargetLength,2));
 	float bone2Denominator = 2 * bone_[0].length * bone_[1].length;
 
 	if (bone2Denominator != 0) {

@@ -144,23 +144,31 @@ void Skeleton::Update() {
 		//float asinNpd1 = asinf(npd1);
 		if (targetPos_->translation_.x >= bone_[0].root.x) {
 
-			bone_[0].rotation.z = acosNpd1 + atan2f(targetPos_->translation_.y,targetPos_->translation_.x + std::numbers::pi_v<float>);
+			bone_[0].rotation.z = acosNpd1 + atan2f(targetPos_->translation_.y,targetPos_->translation_.x);
 
 			
 		} else{ //どちらの値もマイナスの時
-			bone_[0].rotation.z = acosNpd1 + atan2f(targetPos_->translation_.y, targetPos_->translation_.x + std::numbers::pi_v<float>);
+			bone_[0].rotation.z = acosNpd1 + atan2f(targetPos_->translation_.y + std::numbers::pi_v<float>, targetPos_->translation_.x);
 		}
 	}
 
 	//================================= ボーン1の根本・先端の更新 =============================//
 
-	bone_[0].tip.x = bone_[0].length * cosf(bone_[0].rotation.z);
-	bone_[0].tip.y = bone_[0].length * sinf(bone_[0].rotation.z);
+	/*if (bone_[0].rotation.z > 0.0f) {
+		bone_[0].tip.x = bone_[0].root.x + bone_[0].length * cosf(bone_[0].rotation.z);
+		bone_[0].tip.y = bone_[0].root.y + bone_[0].length * sinf(bone_[0].rotation.z);
+	} else if (bone_[0].rotation.z < 0.0f) {
+		bone_[0].tip.x = bone_[0].root.x + bone_[0].length * cosf(bone_[0].rotation.z);
+		bone_[0].tip.y = bone_[0].root.y + bone_[0].length * sinf(bone_[0].rotation.z);
+	}*/
+	bone_[0].tip.x = bone_[0].root.x + bone_[0].length * cosf(bone_[0].rotation.z);
+	bone_[0].tip.y = bone_[0].root.y + bone_[0].length * sinf(bone_[0].rotation.z);
 
 	//================================= ボーン2の角度の更新 ==================================//
 
-	float root2TargetLength = MyMath::Length(targetPos_->translation_ - bone_[0].root);
-	float bone2Numerator = powf(bone_[0].length, 2) + powf(bone_[1].length, 2) - (powf(root2TargetLength,2));
+	//float root2TargetLength = MyMath::Length(targetPos_->translation_ - bone_[0].root);
+	float bone2Numerator = powf(bone_[0].length, 2) + powf(bone_[1].length, 2)
+		- (powf(targetPos_->translation_.x, 2) + powf(targetPos_->translation_.y, 2));
 	float bone2Denominator = 2 * bone_[0].length * bone_[1].length;
 
 	if (bone2Denominator != 0) {
@@ -168,16 +176,30 @@ void Skeleton::Update() {
 		npd2 = std::clamp(npd2, -1.0f, 1.0f);
 		float acosNpd2 = acosf(npd2);
 
-		bone_[1].rotation.z = std::numbers::pi_v<float> + acosNpd2;
-
+		bone_[1].rotation.z = std::numbers::pi_v<float> +acosNpd2;
 	}
 
 	//================================= ボーン2の根本・先端の更新 ==============================//
 
 	bone_[1].root.x = bone_[0].tip.x;
 	bone_[1].root.y = bone_[0].tip.y;
-	bone_[1].tip.x = targetPos_->translation_.x;
-	bone_[1].tip.y = targetPos_->translation_.y;
+	/*if (bone_[1].rotation.z > 0.0f) {
+		bone_[1].tip.x = bone_[1].root.x + bone_[1].length * -cosf(bone_[0].rotation.z + bone_[1].rotation.z);
+		bone_[1].tip.y = bone_[1].root.y + bone_[1].length * -sinf(bone_[0].rotation.z + bone_[1].rotation.z);
+
+	} else if (bone_[1].rotation.z < 0.0f) {*/
+		bone_[1].tip.x = bone_[1].root.x + bone_[1].length * cosf(bone_[0].rotation.z + bone_[1].rotation.z);
+		bone_[1].tip.y = bone_[1].root.y + bone_[1].length * sinf(bone_[0].rotation.z + bone_[1].rotation.z);
+		
+	
+	////先端の座標の移動範囲制限
+	//Vector3 maxTipTranslation = { 
+	//	bone_[0].root.x + 20.0f * cosf(bone_[0].rotation.z),
+	//	bone_[0].root.y + 20.0f * sinf(bone_[0].rotation.z)
+	//};
+
+	//bone_[1].tip.x = std::clamp(bone_[1].tip.x, -maxTipTranslation.x, maxTipTranslation.x);
+	//bone_[1].tip.x = std::clamp(bone_[1].tip.y, -maxTipTranslation.y, maxTipTranslation.y);
 
 	//================================= 関節の更新 =========================================//
 

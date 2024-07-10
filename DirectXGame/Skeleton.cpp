@@ -52,7 +52,7 @@ void Skeleton::Initialize() {
 	bone_[1].root = { 0,0,0 };
 	bone_[1].rotation = { 0,0,0 };
 	bone_[1].length = MyMath::Length(bone_[1].tip - bone_[1].root);
-	
+
 	//ボーンの最大・最小回転角の初期化
 	maxBornRotation_ = sqrtf(powf(bone_[0].length, 2) + powf(bone_[1].length, 2) - 2 * bone_[0].length * bone_[1].length * cosf(170));
 	minBornRotation_ = sqrtf(powf(bone_[0].length, 2) + powf(bone_[1].length, 2) - 2 * bone_[0].length * bone_[1].length * cosf(30));
@@ -126,14 +126,14 @@ void Skeleton::Update() {
 	///////////////////////////////////////////////////////////////////////////////////
 	//									 2boneIK 
 	///////////////////////////////////////////////////////////////////////////////////
-	
+
 
 
 	//================================= ボーン1の角度の更新 =================================//
 
-	float bone1Numerator = - powf(bone_[1].length, 2) + powf(bone_[0].length, 2)
+	float bone1Numerator = -powf(bone_[1].length, 2) + powf(bone_[0].length, 2)
 		+ (powf(targetPos_->translation_.x, 2) + powf(targetPos_->translation_.y, 2));
-		
+
 	float bone1Denominator = 2 * bone_[0].length
 		* sqrtf(powf(targetPos_->translation_.x, 2) + powf(targetPos_->translation_.y, 2));
 
@@ -145,23 +145,16 @@ void Skeleton::Update() {
 		//float asinNpd1 = asinf(npd1);
 		if (bone_[0].rotation.z > 180.0f && bone_[0].rotation.z < 0) {
 
-			bone_[0].rotation.z = acosNpd1 + atan2f(targetPos_->translation_.y,targetPos_->translation_.x);
+			bone_[0].rotation.z = acosNpd1 + atan2f(targetPos_->translation_.y, targetPos_->translation_.x);
 
-			
-		} else{ //どちらの値もマイナスの時
+
+		} else { //どちらの値もマイナスの時
 			bone_[0].rotation.z = acosNpd1 + atan2f(targetPos_->translation_.y, targetPos_->translation_.x);
 		}
 	}
 
 	//================================= ボーン1の根本・先端の更新 =============================//
 
-	/*if (bone_[0].rotation.z > 0.0f) {
-		bone_[0].tip.x = bone_[0].root.x + bone_[0].length * cosf(bone_[0].rotation.z);
-		bone_[0].tip.y = bone_[0].root.y + bone_[0].length * sinf(bone_[0].rotation.z);
-	} else if (bone_[0].rotation.z < 0.0f) {
-		bone_[0].tip.x = bone_[0].root.x + bone_[0].length * cosf(bone_[0].rotation.z);
-		bone_[0].tip.y = bone_[0].root.y + bone_[0].length * sinf(bone_[0].rotation.z);
-	}*/
 	bone_[0].tip.x = bone_[0].root.x + bone_[0].length * cosf(bone_[0].rotation.z);
 	bone_[0].tip.y = bone_[0].root.y + bone_[0].length * sinf(bone_[0].rotation.z);
 
@@ -169,7 +162,7 @@ void Skeleton::Update() {
 
 	//float root2TargetLength = MyMath::Length(targetPos_->translation_ - bone_[0].root);
 	float bone2Numerator = -(powf(targetPos_->translation_.x, 2) + powf(targetPos_->translation_.y, 2)) + powf(bone_[1].length, 2) + powf(bone_[0].length, 2);
-		
+
 	float bone2Denominator = 2 * bone_[0].length * bone_[1].length;
 
 	if (bone2Denominator != 0) {
@@ -187,19 +180,9 @@ void Skeleton::Update() {
 
 	bone_[1].root.x = bone_[0].tip.x;
 	bone_[1].root.y = bone_[0].tip.y;
-	
-		bone_[1].tip.x = bone_[1].root.x + bone_[1].length * cosf(bone_[0].rotation.z + bone_[1].rotation.z);
-		bone_[1].tip.y = bone_[1].root.y + bone_[1].length * sinf(bone_[0].rotation.z + bone_[1].rotation.z);
 
-	
-	////先端の座標の移動範囲制限
-	//Vector3 maxTipTranslation = { 
-	//	bone_[0].root.x + 20.0f * cosf(bone_[0].rotation.z),
-	//	bone_[0].root.y + 20.0f * sinf(bone_[0].rotation.z)
-	//};
-
-	//bone_[1].tip.x = std::clamp(bone_[1].tip.x, -maxTipTranslation.x, maxTipTranslation.x);
-	//bone_[1].tip.x = std::clamp(bone_[1].tip.y, -maxTipTranslation.y, maxTipTranslation.y);
+	bone_[1].tip.x = bone_[1].root.x + bone_[1].length * cosf(bone_[0].rotation.z + bone_[1].rotation.z);
+	bone_[1].tip.y = bone_[1].root.y + bone_[1].length * sinf(bone_[0].rotation.z + bone_[1].rotation.z);
 
 	//================================= 関節の更新 =========================================//
 
@@ -209,13 +192,12 @@ void Skeleton::Update() {
 
 	//================================= updateMatrix =====================================//
 
-	//born_[0].worldTransform.UpdateMatrix();
-	//born_[1].worldTransform.UpdateMatrix();
 
 	joints_[0]->UpdateMatrix();
 	joints_[1]->UpdateMatrix();
 	joints_[2]->UpdateMatrix();
 	targetPos_->UpdateMatrix();
+
 	//========================== ボーンの操作(imgui) ================================//
 
 	ImGui::Begin("debug");
@@ -227,7 +209,7 @@ void Skeleton::Update() {
 	ImGui::DragFloat3("bone2rotation", &bone_[1].rotation.x, 0.01f);
 	ImGui::Text("boneTransform");
 	ImGui::SliderFloat3("bone1RootTranslate", &bone_[0].root.x, -20.0f, 20.0f, "%.3f");
-	ImGui::SliderFloat3("targetPosTransform", &targetPos_->translation_.x,-20.0f,20.0f,"%.3f");
+	ImGui::SliderFloat3("targetPosTransform", &targetPos_->translation_.x, -20.0f, 20.0f, "%.3f");
 	ImGui::Text("joint");
 	ImGui::DragFloat3("joint.shoulder", &joints_[0]->translation_.x, 0.01f);
 	ImGui::DragFloat3("joint.elbow", &joints_[1]->translation_.x, 0.01f);
@@ -246,12 +228,12 @@ void Skeleton::Draw(const ViewProjection& viewProjection) {
 	for (WorldTransform* worldTransformJoint : joints_) {
 		modelJoint_->Draw(*worldTransformJoint, viewProjection);
 	}
-	
+
 
 	//ライン描画
 	PrimitiveDrawer::GetInstance()->DrawLine3d(bone_[0].root, bone_[0].tip, { 1.0f,0.0f,0.0f,1.0f });
 	PrimitiveDrawer::GetInstance()->DrawLine3d(bone_[1].root, bone_[1].tip, { 0.0f,1.0f,0.0f,1.0f });
 
-	
+
 
 }

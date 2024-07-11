@@ -15,7 +15,7 @@ const uint32_t kNumJointHorizonal = 3;
 const uint32_t kNumBorn = 2;
 
 
-void Skeleton::Initialize() {
+void Skeleton::Initialize(const Vector3& rootPos) {
 
 	input_ = Input::GetInstance();
 
@@ -43,7 +43,7 @@ void Skeleton::Initialize() {
 
 	//ボーン1の生成
 	bone_[0].tip = { 10,0,0 };
-	bone_[0].root = { 0,0,0 };
+	bone_[0].root = rootPos;
 	bone_[0].rotation = { 0,0,0 };
 	bone_[0].length = MyMath::Length(bone_[0].tip - bone_[0].root);
 
@@ -130,10 +130,10 @@ void Skeleton::Update() {
 	//================================= ボーン1の角度の更新 =================================//
 
 	float bone1Numerator = -powf(bone_[1].length, 2) + powf(bone_[0].length, 2)
-		+ (powf(targetPos_->translation_.x, 2) + powf(targetPos_->translation_.y, 2));
+		+ (powf(targetPos_->translation_.x - bone_[0].root.x, 2) + powf(targetPos_->translation_.y - bone_[0].root.y, 2));
 
 	float bone1Denominator = 2 * bone_[0].length
-		* sqrtf(powf(targetPos_->translation_.x, 2) + powf(targetPos_->translation_.y, 2));
+		* sqrtf(powf(targetPos_->translation_.x - bone_[0].root.x, 2) + powf(targetPos_->translation_.y - bone_[0].root.y, 2));
 
 	//atanの範囲が-PI/2 ~ PI/2なので場合分けして計算する
 	if (bone1Denominator != 0) {
@@ -143,11 +143,11 @@ void Skeleton::Update() {
 		//float asinNpd1 = asinf(npd1);
 		if (bone_[0].rotation.z > 180.0f && bone_[0].rotation.z < 0) {
 
-			bone_[0].rotation.z = acosNpd1 + atan2f(targetPos_->translation_.y, targetPos_->translation_.x);
+			bone_[0].rotation.z = acosNpd1 + atan2f(targetPos_->translation_.y - bone_[0].root.y, targetPos_->translation_.x - bone_[0].root.x);
 
 
 		} else { //どちらの値もマイナスの時
-			bone_[0].rotation.z = -acosNpd1 + atan2f(targetPos_->translation_.y, targetPos_->translation_.x);
+			bone_[0].rotation.z = -acosNpd1 + atan2f(targetPos_->translation_.y - bone_[0].root.y, targetPos_->translation_.x - bone_[0].root.x);
 		}
 	}
 
@@ -159,7 +159,7 @@ void Skeleton::Update() {
 	//================================= ボーン2の角度の更新 ==================================//
 
 	//float root2TargetLength = MyMath::Length(targetPos_->translation_ - bone_[0].root);
-	float bone2Numerator = -(powf(targetPos_->translation_.x, 2) + powf(targetPos_->translation_.y, 2)) + powf(bone_[1].length, 2) + powf(bone_[0].length, 2);
+	float bone2Numerator = -(powf(targetPos_->translation_.x - bone_[0].root.x, 2) + powf(targetPos_->translation_.y - bone_[0].root.y, 2)) + powf(bone_[1].length, 2) + powf(bone_[0].length, 2);
 
 	float bone2Denominator = 2 * bone_[0].length * bone_[1].length;
 
@@ -190,6 +190,8 @@ void Skeleton::Update() {
 
 	//================================= updateMatrix =====================================//
 
+	targetPos_->translation_.x = std::clamp(targetPos_->translation_.x, bone_[0].root.x - 20.0f, bone_[0].root.x + 20.0f);
+	targetPos_->translation_.y = std::clamp(targetPos_->translation_.y, bone_[0].root.y - 20.0f, bone_[0].root.y + 20.0f);
 
 	joints_[0]->UpdateMatrix();
 	joints_[1]->UpdateMatrix();
@@ -207,7 +209,8 @@ void Skeleton::Update() {
 	ImGui::DragFloat3("bone2rotation", &bone_[1].rotation.x, 0.01f);
 	ImGui::Text("boneTransform");
 	ImGui::SliderFloat3("bone1RootTranslate", &bone_[0].root.x, -20.0f, 20.0f, "%.3f");
-	ImGui::SliderFloat3("targetPosTransform", &targetPos_->translation_.x, -20.0f, 20.0f, "%.3f");
+	ImGui::SliderFloat("targetPosTransformX", &targetPos_->translation_.x, bone_[0].root.x - 20.0f, bone_[0].root.x + 20.0f, "%.3f");
+	ImGui::SliderFloat("targetPosTransformY", &targetPos_->translation_.y, bone_[0].root.y - 20.0f, bone_[0].root.y + 20.0f, "%.3f");
 	ImGui::Text("joint");
 	ImGui::DragFloat3("joint.shoulder", &joints_[0]->translation_.x, 0.01f);
 	ImGui::DragFloat3("joint.elbow", &joints_[1]->translation_.x, 0.01f);

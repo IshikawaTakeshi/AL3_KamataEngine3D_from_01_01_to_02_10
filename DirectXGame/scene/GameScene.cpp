@@ -16,6 +16,11 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 
+	//delete leftLeg_;
+	//delete rightLeg_;
+	delete leftArm_;
+	delete rightArm_;
+
 	delete debugCamera_;
 }
 
@@ -35,8 +40,17 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 
 	//スケルトン初期化
-	skeleton_ = new Skeleton();
-	skeleton_->Initialize();
+	rightArm_ = new Skeleton();
+	rightArm_->Initialize({0,0,0});
+
+	leftArm_ = new Skeleton();
+	leftArm_->Initialize({ 0,0,3.0f });
+
+	//rightLeg_ = new Skeleton();
+	//rightLeg_->Initialize({ 0,-1.0f,1.0f });
+
+	//leftLeg_ = new Skeleton();
+	//leftLeg_->Initialize({ 0,-1.0f,2.0f });
 
 	viewProjection_.Initialize();
 
@@ -46,8 +60,10 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 	//スケルトンの更新処理
-	skeleton_->Update();
-
+	rightArm_->Update();
+	leftArm_->Update();
+	//rightLeg_->Update();
+	//leftLeg_->Update();
 
 	
 #ifdef _DEBUG
@@ -98,7 +114,13 @@ void GameScene::Draw() {
 	/// </summary>
 
 	//スケルトンの描画処理
-	skeleton_->Draw(debugCamera_->GetViewProjection());
+	rightArm_->Draw(debugCamera_->GetViewProjection());
+
+	leftArm_->Draw(debugCamera_->GetViewProjection());
+
+	//rightLeg_->Draw(debugCamera_->GetViewProjection());
+
+	//leftLeg_->Draw(debugCamera_->GetViewProjection());
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

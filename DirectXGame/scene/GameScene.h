@@ -59,7 +59,10 @@ private: // メンバ変数
 		float length; //ボーンの長さ
 	};
 
-	Skeleton* skeleton_;
+	Skeleton* rightArm_;
+	Skeleton* leftArm_;
+	//Skeleton* rightLeg_;
+	//Skeleton* leftLeg_;
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
 	Matrix4x4 cameraMatrix_;

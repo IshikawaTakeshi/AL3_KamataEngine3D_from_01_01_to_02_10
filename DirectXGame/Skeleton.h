@@ -13,7 +13,7 @@ struct Bone {
 	float xyLength;
 	float yzLength;
 	float length; //ボーンの長さ
-	//WorldTransform worldTransform; //ワールドトランスフォーム
+	
 };
 
 class Skeleton {
@@ -22,7 +22,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize(const Vector3& rootPos);
 
 	/// <summary>
 	/// 毎フレーム処理

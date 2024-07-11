@@ -127,8 +127,6 @@ void Skeleton::Update() {
 	//									 2boneIK 
 	///////////////////////////////////////////////////////////////////////////////////
 
-
-
 	//================================= ボーン1の角度の更新 =================================//
 
 	float bone1Numerator = -powf(bone_[1].length, 2) + powf(bone_[0].length, 2)
@@ -149,7 +147,7 @@ void Skeleton::Update() {
 
 
 		} else { //どちらの値もマイナスの時
-			bone_[0].rotation.z = acosNpd1 + atan2f(targetPos_->translation_.y, targetPos_->translation_.x);
+			bone_[0].rotation.z = -acosNpd1 + atan2f(targetPos_->translation_.y, targetPos_->translation_.x);
 		}
 	}
 

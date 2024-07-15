@@ -10,10 +10,7 @@ struct Bone {
 	Vector3 tip; //ボーンの先端
 	Vector3 root; //ボーンの根本
 	Vector3 rotation; //ボーンの角度
-	float xyLength;
-	float yzLength;
 	float length; //ボーンの長さ
-	
 };
 
 class Skeleton {
@@ -25,14 +22,41 @@ public:
 	void Initialize(const Vector3& rootPos);
 
 	/// <summary>
-	/// 毎フレーム処理
+	/// 腕の更新処理
 	/// </summary>
-	void Update();
+	void UpdateArm(const WorldTransform& target);
+
+	/// <summary>
+	/// 脚の更新処理
+	/// </summary>
+	void UpdateLeg(const WorldTransform& target);
+
+	/// <summary>
+	/// ImGuiの更新
+	/// </summary>
+	/// <param name="label"></param>
+	void UpdateImGui(const char* label);
 
 	/// <summary>
 	/// 描画
 	/// </summary>
 	void Draw(const ViewProjection& viewProjection);
+
+	/// <summary>
+	/// ボーンの根元の座標の取得
+	/// </summary>
+	Vector3 GetRootPos(int num) {
+		return bone_[num].root;
+	}
+
+	/// <summary>
+	/// ボーンの根元の座標の取得
+	/// </summary>
+	Vector3 GetTipPos(int num) {
+		return bone_[num].tip;
+	}
+
+
 
 private:
 
@@ -40,19 +64,11 @@ private:
 
 
 	//ボーンの最大回転角(度)
-	float maxBornRotation_;
+	//float maxBornRotation_;
 	//ボーンの最小回転角(度)
-	float minBornRotation_;
-
-
+	//float minBornRotation_;
 
 	//ボーン
 	std::vector<Bone> bone_;
-	std::vector<WorldTransform*> joints_; //関節
-	Model* modelJoint_ = nullptr; //関節のモデル
-	//目標位置
-	WorldTransform* targetPos_ = nullptr;
-	Model* targetModel_ = nullptr; //目標位置のモデル
-
 };
 

@@ -61,12 +61,23 @@ private: // メンバ変数
 
 	Skeleton* rightArm_;
 	Skeleton* leftArm_;
-	//Skeleton* rightLeg_;
-	//Skeleton* leftLeg_;
+	Skeleton* rightLeg_;
+	Skeleton* leftLeg_;
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
 	Matrix4x4 cameraMatrix_;
-	WorldTransform worldTransform_;
-	std::vector<WorldTransform*> joints_; //関節
+	//WorldTransform worldTransform_;
+	//std::vector<WorldTransform*> joints_; //関節
 	ViewProjection viewProjection_;
+
+	//目標位置
+	WorldTransform targetPos_[4];
+	Model* modelTarget_[4];
+
+	//胴体の座標
+	WorldTransform bodyPosRoot_;
+	WorldTransform bodyPosTip_;
+	//頭部の座標
+	WorldTransform headPos_;
+	Model* modelHead_;
 };
